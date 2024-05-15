@@ -44,20 +44,42 @@ public class Database {
     /**
      * Executes a query on the database
      * 
-     * @param exec The query to execute
+     * @param sql The query to execute
      * @return The result of the query
      */
 
-    public static ResultSet exec(String exec) {
+    public static ResultSet query(String sql) {
         try {
             if (!connected || Database.connection.isClosed() || !Database.connection.isValid(0))
                 Database.disconnect();
             Database.connect();
             Statement statement = connection.createStatement();
-            return statement.executeQuery(exec);
+            return statement.executeQuery(sql);
         } catch (SQLException e) {
             System.out.println("Error executing query: " + e.getMessage());
             return null;
+        }
+    }
+
+    /**
+     * Executes an update on the database
+     * 
+     * @param sql The update to execute
+     * @return The result of the update
+     */
+
+    public static void update(String sql) {
+        try {
+            if (!connected || Database.connection.isClosed() || !Database.connection.isValid(0))
+                Database.disconnect();
+            Database.connect();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.execute();
+            return;
+
+        } catch (SQLException e) {
+            System.out.println("Error executing update: " + e.getMessage());
+            return;
         }
     }
 
