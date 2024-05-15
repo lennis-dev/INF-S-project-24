@@ -2,8 +2,6 @@ package Notes;
 
 import java.sql.*;
 
-import javax.xml.crypto.Data;
-
 public class Database {
     private static Connection connection;
     private static Boolean connected = false;
