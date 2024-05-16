@@ -11,10 +11,10 @@ public class Database {
      */
 
     private static void connect() {
-        if (connected) {
-            return;
-        }
         try {
+            if (connected) {
+                    return;
+            }
             Database.connection = DriverManager.getConnection(Config.getJDBCString(), Config.getUsername(),
                     Config.getPassword());
             System.out.println("Connected to database" + Config.getJDBCString() + " as " + Config.getUsername());
@@ -29,10 +29,10 @@ public class Database {
      */
 
     private static void disconnect() {
-        if (!connected) {
-            return;
-        }
         try {
+            if (!connected) {
+                    return;
+            }
             Database.connection.close();
             System.out.println("Disconnected from database");
             connected = false;
