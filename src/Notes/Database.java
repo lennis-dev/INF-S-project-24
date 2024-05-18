@@ -50,7 +50,7 @@ public class Database {
 
     public static ResultSet query(String sql) {
         try {
-            if (!connected || Database.connection.isClosed() || !Database.connection.isValid(0))
+            if (!connected)
                 Database.disconnect();
             Database.connect();
             Statement statement = connection.createStatement();
@@ -70,7 +70,7 @@ public class Database {
 
     public static void update(String sql) {
         try {
-            if (!connected || Database.connection.isClosed() || !Database.connection.isValid(0))
+            if (!connected)
                 Database.disconnect();
             Database.connect();
             PreparedStatement statement = connection.prepareStatement(sql);
