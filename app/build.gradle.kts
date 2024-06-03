@@ -14,21 +14,13 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    maven(url = "https://jitpack.io")
 }
 
 dependencies {
     // This dependency is used by the application.
-    implementation(libs.guava)
-}
-
-testing {
-    suites {
-        // Configure the built-in test suite
-        val test by getting(JvmTestSuite::class) {
-            // Use JUnit Jupiter test framework
-            useJUnitJupiter("5.10.1")
-        }
-    }
+    implementation("org.xerial:sqlite-jdbc:3.46.0.0")
+    implementation("com.github.SpaiR:imgui-java:v1.86.11")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -40,5 +32,5 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "org.example.App"
+    mainClass = "dev.lennis.Main.java"
 }
