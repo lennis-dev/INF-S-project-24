@@ -32,5 +32,5 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "dev.lennis.Main.java"
+    mainClass.set("dev.lennis.school.notes.Main")
 }
