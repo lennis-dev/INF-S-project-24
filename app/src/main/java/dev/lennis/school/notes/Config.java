@@ -1,4 +1,4 @@
-package Notes;
+package dev.lennis.school.notes;
 
 public class Config {
     /*
