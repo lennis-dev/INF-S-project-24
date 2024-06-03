@@ -1,4 +1,4 @@
-package Notes;
+package dev.lennis.school.notes;
 
 import java.sql.*;
 
@@ -13,7 +13,7 @@ public class Database {
     private static void connect() {
         try {
             if (connected) {
-                    return;
+                return;
             }
             Database.connection = DriverManager.getConnection(Config.getJDBCString(), Config.getUsername(),
                     Config.getPassword());
@@ -31,7 +31,7 @@ public class Database {
     private static void disconnect() {
         try {
             if (!connected) {
-                    return;
+                return;
             }
             Database.connection.close();
             System.out.println("Disconnected from database");
