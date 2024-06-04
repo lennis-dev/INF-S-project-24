@@ -83,7 +83,8 @@ public class Data {
         params.add(displayName);
         params.add(passwordSalt);
         params.add(passwordHash);
-        Database.execute("INSERT INTO users (username, displayName, passwordSalt, passwordHash) VALUES (?, ?, ?, ?)",
+        Database.execute(
+                "INSERT OR IGNORE INTO users (username, displayName, passwordSalt, passwordHash) VALUES (?, ?, ?, ?)",
                 params, true);
     }
 
