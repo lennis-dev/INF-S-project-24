@@ -1,183 +1,110 @@
 package dev.lennis.school.notes;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class Data {
-    static ArrayList<ArrayList<String>> sqlQuery(String query) {
-        try {
-            ResultSet resultSet = Database.query(query);
-            if (resultSet == null)
-                return null;
+    /* == NOTES == */
 
-            ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
-            while (resultSet.next()) {
-                ArrayList<String> row = new ArrayList<String>();
-                for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-                    row.add(resultSet.getString(i));
-                }
-                result.add(row);
-            }
-
-            return result;
-        } catch (Exception e) {
-            System.out.println("Error executing SQL query: " + e.getMessage());
-            return null;
-        }
+    public static ArrayList<ArrayList<String>> getNotes() {
+        return Database.execute("SELECT * FROM notes", new ArrayList<String>(), false);
     }
 
-    /**
-     * Gets a note from the database by id
-     * 
-     * @param id The ID of the note
-     * @return An array containing the heading and text of the note
-     *         [0] The ID
-     *         [1] The username
-     *         [2] The heading
-     *         [3] The text
-     *         [4] The tags
-     * 
-     */
-    static String[] getNote(int id, String username) {
-        try {
-            String[] result = new String[5];
-            result[4] = "";
-
-            ArrayList<ArrayList<String>> queryResult = sqlQuery(
-                    "SELECT ID, username, heading, text, tag FROM notes LEFT JOIN tags ON notes.ID = tags.noteID WHERE ID = "
-                            + id + " AND username = '" + username + "';");
-
-            for (ArrayList<String> row : queryResult) {
-                if (result[4] != "")
-                    result[4] = result[4] + ", " + row.get(4);
-                else {
-                    result[4] = result[0] = row.get(0);
-                    result[1] = row.get(1);
-                    result[2] = row.get(2);
-                    result[3] = row.get(3);
-                }
-
-            }
-            return result;
-        } catch (Exception e) {
-            System.out.println("Error getting note: " + e.getMessage());
-            return null;
-        }
+    public static ArrayList<ArrayList<String>> getNoteById(int id) {
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(Integer.toString(id));
+        return Database.execute("SELECT * FROM notes WHERE id = ?", params, false);
     }
 
-    /**
-     * Gets all notes from the database
-     * 
-     * @return An multidimensional array containing the notes and their data
-     *         [0] The ID
-     *         [1] The username
-     *         [2] The heading
-     *         [3] The text
-     *         [4] The tags
-     */
-
-    static String[][] getNotesByTag(String tag, String username) {
-        try {
-            ArrayList<ArrayList<String>> queryResult = sqlQuery(
-                    "SELECT notes.ID, username, heading, text, tag FROM notes LEFT JOIN tags ON notes.ID = tags.noteID WHERE notes.ID IN (SELECT noteID FROM tags WHERE tag = '"
-                            + tag + "') AND username = '" + username + "';");
-
-            for (ArrayList<String> row : queryResult) {
-                if (row.get(4) == null)
-                    row.set(4, "");
-                for (ArrayList<String> row2 : queryResult) {
-                    if (row.get(0).equals(row2.get(0))) {
-                        row.set(4, row.get(4) + ", " + row2.get(4));
-                        queryResult.remove(row2);
-                    }
-
-                }
-            }
-
-            String[][] result = new String[queryResult.size()][5];
-            for (int i = 0; i < queryResult.size(); i++) {
-                result[i] = queryResult.get(i).toArray(new String[5]);
-            }
-
-            return result;
-        } catch (Exception e) {
-            System.out.println("Error getting notes by tag: " + e.getMessage());
-            return null;
-        }
+    public static ArrayList<ArrayList<String>> addNote(String username, String heading, String text) {
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(username);
+        params.add(heading);
+        params.add(text);
+        Database.execute("INSERT INTO notes (username, heading, text) VALUES (?, ?, ?)", params, true);
+        return Database.execute("SELECT * FROM notes WHERE id = (SELECT MAX(id) FROM notes)", new ArrayList<String>(),
+                false);
     }
 
-    static boolean addTagToNote(int noteID, String tag) {
-        try {
-            Database.update("INSERT INTO tags (noteID, tag) VALUES (" + noteID + ", '" + tag + "');");
-            return true;
-        } catch (Exception e) {
-            System.out.println("Error adding tag to note: " + e.getMessage());
-            return false;
-        }
+    public static void updateNoteHeading(int id, String heading) {
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(heading);
+        params.add(Integer.toString(id));
+        Database.execute("UPDATE notes SET heading = ? WHERE id = ?", params, true);
     }
 
-    static boolean removeTagFromNote(int noteID, String tag) {
-        try {
-            Database.update("DELETE FROM tags WHERE noteID = " + noteID + " AND tag = '" + tag + "';");
-            return true;
-        } catch (Exception e) {
-            System.out.println("Error removing tag from note: " + e.getMessage());
-            return false;
-        }
+    public static void updateNoteText(int id, String text) {
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(text);
+        params.add(Integer.toString(id));
+        Database.execute("UPDATE notes SET text = ? WHERE id = ?", params, true);
     }
 
-    /* ==== USER START ==== */
-
-    static String[] getUserByUsername(String username) {
-        try {
-            ArrayList<ArrayList<String>> queryResult = sqlQuery(
-                    "SELECT * FROM users WHERE username = '" + username + "';");
-
-            String[] result = new String[4];
-            for (ArrayList<String> row : queryResult) {
-                result[0] = row.get(0);
-                result[1] = row.get(1);
-                result[2] = row.get(2);
-                result[3] = row.get(3);
-            }
-
-            return result;
-        } catch (Exception e) {
-            System.out.println("Error getting user by username: " + e.getMessage());
-            return null;
-        }
+    public static void deleteNoteById(int id) {
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(Integer.toString(id));
+        Database.execute("DELETE FROM notes WHERE id = ?", params, true);
     }
 
-    static void setUserPasswordByUsername(String username, String passwordSalt, String passwordHash) {
-        try {
-            Database.update("UPDATE users SET passwordSalt = '" + passwordSalt + "', passwordHash = '" + passwordHash
-                    + "' WHERE username = '" + username + "';");
-        } catch (Exception e) {
-            System.out.println("Error setting user password by username: " + e.getMessage());
-        }
+    public static ArrayList<ArrayList<String>> getTagsByNoteId(int noteId) {
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(Integer.toString(noteId));
+        return Database.execute("SELECT * FROM tags WHERE noteID = ?", params, false);
     }
 
-    static void createUser(String username, String displayName, String passwordSalt, String passwordHash) {
-        try {
-            Database.update("INSERT INTO users (username, displayName, passwordSalt, passwordHash) VALUES ('" + username
-                    + "', '" + displayName + "', '" + passwordSalt + "', '" + passwordHash + "');");
-        } catch (Exception e) {
-            System.out.println("Error creating user: " + e.getMessage());
-        }
+    public static void addTagToNoteId(int noteId, String tag) {
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(Integer.toString(noteId));
+        params.add(tag);
+        Database.execute("INSERT INTO tags (noteID, tag) VALUES (?, ?)", params, true);
     }
 
-    static int createNewNote(String username, String title, String content, String[] tags) {
-        try {
-            Database.update("INSERT INTO notes (username, heading, text) VALUES ('" + username + "', '" + title + "', '"
-                    + content + "');");
-            int noteID = Integer.parseInt(sqlQuery("SELECT MAX(ID) FROM notes;").get(0).get(0));
-            for (String tag : tags) {
-                Database.update("INSERT INTO tags (noteID, tag) VALUES (" + noteID + ", '" + tag + "');");
-            }
-            return noteID;
-        } catch (Exception e) {
-            System.out.println("Error creating new note: " + e.getMessage());
-        }
-        return -1;
+    public static void removeTagFromNoteId(int noteId, String tag) {
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(Integer.toString(noteId));
+        params.add(tag);
+        Database.execute("DELETE FROM tags WHERE noteID = ? AND tag = ?", params, true);
+    }
+
+    /* == USERS == */
+
+    public static ArrayList<ArrayList<String>> getUsers() {
+        return Database.execute("SELECT username, displayName FROM users", new ArrayList<String>(), false);
+    }
+
+    public static ArrayList<String> getUserByUsername(String username) {
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(username);
+        return Database.execute("SELECT * FROM users WHERE username = ?", params, false).get(0);
+    }
+
+    public static void addUser(String username, String displayName, String passwordSalt, String passwordHash) {
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(username);
+        params.add(displayName);
+        params.add(passwordSalt);
+        params.add(passwordHash);
+        Database.execute("INSERT INTO users (username, displayName, passwordSalt, passwordHash) VALUES (?, ?, ?, ?)",
+                params, true);
+    }
+
+    public static void updateUserDisplayName(String username, String displayName) {
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(displayName);
+        params.add(username);
+        Database.execute("UPDATE users SET displayName = ? WHERE username = ?", params, true);
+    }
+
+    public static void updateUserPassword(String username, String passwordSalt, String passwordHash) {
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(passwordSalt);
+        params.add(passwordHash);
+        params.add(username);
+        Database.execute("UPDATE users SET passwordSalt = ?, passwordHash = ? WHERE username = ?", params, true);
+    }
+
+    public static void deleteUserByUsername(String username) {
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(username);
+        Database.execute("DELETE FROM users WHERE username = ?", params, true);
     }
 }
