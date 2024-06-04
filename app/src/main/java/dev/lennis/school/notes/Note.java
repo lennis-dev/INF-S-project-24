@@ -17,6 +17,13 @@ public class Note {
         return notes;
     }
 
+    public static Note createNewNote(String username, String title, String content, String[] tags) {
+        int id = Data.createNewNote(username, title, content, tags);
+        if (id == -1)
+            return null;
+        return new Note(id, username, title, content, tags);
+    }
+
     public Note(int id, String username) {
         this.id = id;
         String[] noteData = Data.getNote(id, username);

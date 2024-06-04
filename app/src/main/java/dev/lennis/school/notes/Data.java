@@ -166,4 +166,18 @@ public class Data {
         }
     }
 
+    static int createNewNote(String username, String title, String content, String[] tags) {
+        try {
+            Database.update("INSERT INTO notes (username, heading, text) VALUES ('" + username + "', '" + title + "', '"
+                    + content + "');");
+            int noteID = Integer.parseInt(sqlQuery("SELECT MAX(ID) FROM notes;").get(0).get(0));
+            for (String tag : tags) {
+                Database.update("INSERT INTO tags (noteID, tag) VALUES (" + noteID + ", '" + tag + "');");
+            }
+            return noteID;
+        } catch (Exception e) {
+            System.out.println("Error creating new note: " + e.getMessage());
+        }
+        return -1;
+    }
 }
