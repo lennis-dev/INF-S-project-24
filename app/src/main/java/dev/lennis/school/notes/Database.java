@@ -14,6 +14,7 @@ public class Database {
     private static void open() throws SQLException {
         try {
             if (connection == null) {
+                install();
                 connection = DriverManager.getConnection(url);
                 System.out.println("Connected to database");
                 connection.setAutoCommit(true);
@@ -105,7 +106,6 @@ public class Database {
      */
 
     static {
-        install();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 Database.close();
