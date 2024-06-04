@@ -18,8 +18,7 @@ repositories {
 }
 
 dependencies {
-    implementation("mysql:mysql-connector-java:8.0.33")
-    // implementation("org.xerial:sqlite-jdbc:3.46.0.0")
+    implementation("org.xerial:sqlite-jdbc:3.46.0.0")
     implementation("com.github.SpaiR:imgui-java:v1.86.11")
 }
 
