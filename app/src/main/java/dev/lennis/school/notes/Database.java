@@ -91,7 +91,8 @@ public class Database {
         String[] sql = {
                 "CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY, username TINYTEXT, heading text, text TEXT, FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE)",
                 "CREATE TABLE IF NOT EXISTS tags (noteID INTEGER, tag TINYTEXT, FOREIGN KEY(noteID) REFERENCES notes(id) ON DELETE CASCADE)",
-                "CREATE TABLE IF NOT EXISTS users (username TINYTEXT PRIMARY KEY, displayName TINYTEXT, passwordSalt TINYTEXT, passwordHash TEXT)" };
+                "CREATE TABLE IF NOT EXISTS users (username TINYTEXT PRIMARY KEY, displayName TINYTEXT, passwordSalt TINYTEXT, passwordHash TEXT)"
+        };
         for (String s : sql) {
             execute(s, new ArrayList<String>(), true);
         }
