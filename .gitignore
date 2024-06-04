@@ -33,3 +33,6 @@ build
 .settings
 .project
 app/.classpath
+
+# Ignore .VScode files
+.vscode
