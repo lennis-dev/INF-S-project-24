@@ -1,43 +1,41 @@
 package dev.lennis.school.notes;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Database {
     private static Connection connection;
-    private static Boolean connected = false;
+    private static String url = "jdbc:sqlite:notes.db";
 
     /*
-     * Connects to the database
+     * Open the database
      */
 
-    private static void connect() {
+    private static void open() throws SQLException {
         try {
-            if (connected) {
-                return;
+            if (connection == null) {
+                connection = DriverManager.getConnection(url);
+                System.out.println("Connected to database");
+                connection.setAutoCommit(true);
             }
-            Database.connection = DriverManager.getConnection(Config.getJDBCString(), Config.getUsername(),
-                    Config.getPassword());
-            System.out.println("Connected to database" + Config.getJDBCString() + " as " + Config.getUsername());
-            connected = true;
         } catch (SQLException e) {
             System.out.println("Error connecting to database: " + e.getMessage());
         }
+
     }
 
     /*
-     * Disconnects from the database
+     * Close the connection to the database
      */
 
-    private static void disconnect() {
+    private static void close() {
         try {
-            if (!connected) {
-                return;
+            if (connection != null) {
+                connection.close();
+                System.out.println("Connection to database closed");
             }
-            Database.connection.close();
-            System.out.println("Disconnected from database");
-            connected = false;
         } catch (SQLException e) {
-            System.out.println("Error disconnecting from database: " + e.getMessage());
+            System.out.println("Error closing connection: " + e.getMessage());
         }
     }
 
@@ -48,38 +46,54 @@ public class Database {
      * @return The result of the query
      */
 
-    public static ResultSet query(String sql) {
+    public static ArrayList<ArrayList<String>> execute(String sql, ArrayList<String> params, boolean update) {
+        ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
         try {
-            if (!connected)
-                Database.disconnect();
-            Database.connect();
-            Statement statement = connection.createStatement();
-            return statement.executeQuery(sql);
+            open();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            for (int i = 0; i < params.size(); i++) {
+                statement.setString(i + 1, params.get(i));
+            }
+            if (update) {
+                statement.executeUpdate();
+                return result;
+            }
+            ResultSet rs = statement.executeQuery();
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columnsNumber = rsmd.getColumnCount();
+            while (rs.next()) {
+                ArrayList<String> row = new ArrayList<String>();
+                for (int i = 1; i <= columnsNumber; i++) {
+                    row.add(rs.getString(i));
+                }
+                result.add(row);
+            }
+            statement.close();
         } catch (SQLException e) {
             System.out.println("Error executing query: " + e.getMessage());
-            return null;
+            e.printStackTrace();
         }
+        return result;
     }
 
-    /**
-     * Executes an update on the database
-     * 
-     * @param sql The update to execute
-     * @return The result of the update
-     */
+    public static String[] getNoteById(int id) {
+        String sql = "SELECT * FROM notes WHERE id = ?";
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(Integer.toString(id));
+        ArrayList<ArrayList<String>> result = execute(sql, params, false);
+        if (result.size() > 0) {
+            return result.get(0).toArray(new String[0]);
+        }
+        return null;
+    }
 
-    public static void update(String sql) {
-        try {
-            if (!connected)
-                Database.disconnect();
-            Database.connect();
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.execute();
-            return;
-
-        } catch (SQLException e) {
-            System.out.println("Error executing update: " + e.getMessage());
-            return;
+    public static void install() {
+        String[] sql = {
+                "CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY, username TINYTEXT, heading text, text TEXT)",
+                "CREATE TABLE IF NOT EXISTS tags (noteID INTEGER, tag TINYTEXT, FOREIGN KEY(noteID) REFERENCES notes(id) ON DELETE CASCADE)",
+                "CREATE TABLE IF NOT EXISTS users (username TINYTEXT PRIMARY KEY, displayName TINYTEXT, passwordSalt TINYTEXT, passwordHash TEXT)" };
+        for (String s : sql) {
+            execute(s, new ArrayList<String>(), true);
         }
     }
 
@@ -90,9 +104,10 @@ public class Database {
      */
 
     static {
+        install();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                Database.disconnect();
+                Database.close();
             }
         });
     }
