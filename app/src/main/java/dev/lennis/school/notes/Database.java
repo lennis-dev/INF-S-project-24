@@ -14,10 +14,10 @@ public class Database {
     private static void open() throws SQLException {
         try {
             if (connection == null) {
-                install();
                 connection = DriverManager.getConnection(url);
-                System.out.println("Connected to database");
                 connection.setAutoCommit(true);
+                install();
+                System.out.println("Connected to database");
             }
         } catch (SQLException e) {
             System.out.println("Error connecting to database: " + e.getMessage());
