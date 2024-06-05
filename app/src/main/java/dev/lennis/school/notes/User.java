@@ -1,6 +1,7 @@
 package dev.lennis.school.notes;
 
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.nio.charset.StandardCharsets;
 
 public class User {
@@ -21,7 +22,11 @@ public class User {
         // GitHub copilot suggested this salt generation method
         String salt = Long.toHexString(Double.doubleToLongBits(Math.random()));
         String hash = hashPassword(password, salt);
-        Data.createUser(username, displayName, salt, hash);
+        Data.addUser(username, displayName, salt, hash);
+    }
+
+    public static void deleteUserByUsername(String username) {
+        Data.deleteUserByUsername(username);
     }
 
     public User(String username, String displayName, String passwordSalt, String passwordHash) {
@@ -33,10 +38,14 @@ public class User {
 
     public User(String username) {
         this.username = username;
-        String[] data = Data.getUserByUsername(username);
-        this.displayName = data[1];
-        this.passwordSalt = data[2];
-        this.passwordHash = data[3];
+        ArrayList<String> data = Data.getUserByUsername(username);
+        this.displayName = data.get(1);
+        this.passwordSalt = data.get(2);
+        this.passwordHash = data.get(3);
+    }
+
+    public ArrayList<Note> getNotes() {
+        return Note.getNotesByUsername(username);
     }
 
     /**
@@ -105,16 +114,19 @@ public class User {
      * @param password The password
      */
     public void setPasswordHash(String password) {
+        // GitHub copilot suggested this salt generation method
+        this.passwordSalt = Long.toHexString(Double.doubleToLongBits(Math.random()));
         this.passwordHash = hashPassword(password, this.passwordSalt);
-        Data.setUserPasswordByUsername(this.username, this.passwordSalt, this.passwordHash);
+        Data.updateUserPassword(username, passwordSalt, passwordHash);
     }
 
     /**
-     * Get all notes by the user
+     * Set the display name
      * 
-     * @return An array of notes
+     * @param displayName The display name
      */
-    public Note[] getNotesByTag(String tag) {
-        return Note.getNotesByTag(tag, this.username);
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+        Data.updateUserDisplayName(username, displayName);
     }
 }
