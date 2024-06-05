@@ -1,47 +1,50 @@
 package dev.lennis.school.notes;
 
+import java.util.ArrayList;
+
 public class Note {
     private int id;
-    private String title;
-    private String content;
     private String username;
-    private String[] tags;
+    private String heading;
+    private String title;
+    private ArrayList<String> tags;
 
-    public static Note[] getNotesByTag(String tag, String username) {
-        String[][] noteData = Data.getNotesByTag(tag, username);
-        Note[] notes = new Note[noteData.length];
-        for (int i = 0; i < noteData.length; i++) {
-            notes[i] = new Note(Integer.parseInt(noteData[i][0]), noteData[i][1], noteData[i][2], noteData[i][3],
-                    noteData[i][4].split(", "));
+    static public ArrayList<Note> getNotes() {
+        ArrayList<Note> notes = new ArrayList<Note>();
+        for (ArrayList<String> note : Data.getNotes()) {
+            notes.add(new Note(Integer.parseInt(note.get(0))));
         }
         return notes;
     }
 
-    public static Note createNewNote(String username, String title, String content, String[] tags) {
-        int id = Data.createNewNote(username, title, content, tags);
-        if (id == -1)
-            return null;
-        return new Note(id, username, title, content, tags);
+    static public ArrayList<Note> getNotesByTag(String tag) {
+        ArrayList<Note> notes = new ArrayList<Note>();
+        for (int noteId : Data.getNotesByTag(tag)) {
+            notes.add(new Note(noteId));
+        }
+        return notes;
     }
 
-    public Note(int id, String username) {
-        this.id = id;
-        String[] noteData = Data.getNote(id, username);
-        this.username = noteData[1];
-        this.title = noteData[2];
-        this.content = noteData[3];
-        if (noteData[4] != null)
-            this.tags = noteData[4].split(", ");
-        else
-            this.tags = new String[0];
+    static public ArrayList<Note> getNotesByUsername(String username) {
+        ArrayList<Note> notes = new ArrayList<Note>();
+        for (int noteId : Data.getNotesByUsername(username)) {
+            notes.add(new Note(noteId));
+        }
+        return notes;
     }
 
-    public Note(int id, String username, String title, String content, String[] tags) {
+    static public Note addNote(String username, String heading, String text) {
+        int note = Data.addNote(username, heading, text);
+        return new Note(note);
+    }
+
+    public Note(int id) {
         this.id = id;
-        this.username = username;
-        this.title = title;
-        this.content = content;
-        this.tags = tags;
+        ArrayList<String> note = Data.getNoteById(id);
+        this.username = note.get(1);
+        this.heading = note.get(2);
+        this.title = note.get(3);
+        this.tags = Data.getTagsByNoteId(id);
     }
 
     public int getId() {
@@ -52,32 +55,46 @@ public class Note {
         return username;
     }
 
+    public String getHeading() {
+        return heading;
+    }
+
     public String getTitle() {
         return title;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public String[] getTags() {
+    public ArrayList<String> getTags() {
         return tags;
     }
 
-    public String getTagsAsString() {
-        String result = "";
-        for (String tag : tags) {
-            result += tag + ", ";
-        }
-        return result.substring(0, result.length() - 2);
+    public void setHeading(String heading) {
+        this.heading = heading;
+        Data.updateNoteHeading(id, heading);
+    }
+
+    public void setText(String text) {
+        this.title = text;
+        Data.updateNoteText(id, text);
+    }
+
+    public void addTag(String tag) {
+        if (tags.contains(tag))
+            return;
+        tags.add(tag);
+        Data.addTagToNoteId(id, tag);
+    }
+
+    public void removeTag(String tag) {
+        tags.remove(tag);
+        Data.removeTagFromNoteId(id, tag);
+    }
+
+    public void delete() {
+        Data.deleteNoteById(id);
     }
 
     public boolean hasTag(String tag) {
-        for (String t : tags) {
-            if (t.equals(tag))
-                return true;
-        }
-        return false;
+        return tags.contains(tag);
     }
 
 }

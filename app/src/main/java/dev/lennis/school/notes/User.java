@@ -44,6 +44,10 @@ public class User {
         this.passwordHash = data.get(3);
     }
 
+    public ArrayList<Note> getNotes() {
+        return Note.getNotesByUsername(username);
+    }
+
     /**
      * Check if a password is correct
      * 
