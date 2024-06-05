@@ -47,13 +47,13 @@ public class Database {
      * @return The result of the query
      */
 
-    public static ArrayList<ArrayList<String>> execute(String sql, ArrayList<String> params, boolean update) {
+    public static ArrayList<ArrayList<String>> execute(String sql, String[] params, boolean update) {
         ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
         try {
             open();
             PreparedStatement statement = connection.prepareStatement(sql);
-            for (int i = 0; i < params.size(); i++) {
-                statement.setString(i + 1, params.get(i));
+            for (int i = 0; i < params.length; i++) {
+                statement.setString(i + 1, params[i]);
             }
             if (update) {
                 statement.executeUpdate();
@@ -84,7 +84,7 @@ public class Database {
                 "CREATE TABLE IF NOT EXISTS users (username TINYTEXT PRIMARY KEY, displayName TINYTEXT, passwordSalt TINYTEXT, passwordHash TEXT)"
         };
         for (String s : sql) {
-            execute(s, new ArrayList<String>(), true);
+            execute(s, new String[] {}, true);
         }
     }
 
