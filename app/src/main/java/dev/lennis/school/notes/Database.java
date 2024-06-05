@@ -77,17 +77,6 @@ public class Database {
         return result;
     }
 
-    public static String[] getNoteById(int id) {
-        String sql = "SELECT * FROM notes WHERE id = ?";
-        ArrayList<String> params = new ArrayList<String>();
-        params.add(Integer.toString(id));
-        ArrayList<ArrayList<String>> result = execute(sql, params, false);
-        if (result.size() > 0) {
-            return result.get(0).toArray(new String[0]);
-        }
-        return null;
-    }
-
     public static void install() {
         String[] sql = {
                 "CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY, username TINYTEXT, heading text, text TEXT, FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE)",
