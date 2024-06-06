@@ -17,9 +17,7 @@ repositories {
   maven(url = "https://jitpack.io")
 }
 
-dependencies {
-  implementation("org.xerial:sqlite-jdbc:3.46.0.0")
-}
+dependencies { implementation("org.xerial:sqlite-jdbc:3.46.0.0") }
 
 // Apply a specific Java toolchain to ease working on different environments.
 java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }
