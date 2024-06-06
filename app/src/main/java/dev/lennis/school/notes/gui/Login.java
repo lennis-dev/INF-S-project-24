@@ -4,17 +4,20 @@ import javax.swing.*;
 
 public class Login extends JFrame {
   public Login() {
-    this.setTitle("Mint-Blow - Login");
+    setTitle("Mint-Blow - Login");
+    setUndecorated(true);
 
     JLabel heading = new JLabel();
     heading.setText("Login");
+    heading.setSize(280, 40);
+    heading.setVisible(true);
+    heading.setBounds(180, 30, 100, 30);
+    add(heading);
 
-    this.setUndecorated(true);
+    setSize(300, 400);
+    setLocationRelativeTo(null);
+    setLayout(null);
 
-    this.setSize(300, 400);
-    this.setLocationRelativeTo(null);
-
-    // this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setVisible(true);
+    setVisible(true);
   }
 }
