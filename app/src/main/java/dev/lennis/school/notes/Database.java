@@ -11,7 +11,7 @@ public class Database {
      * Open the database
      */
 
-    private static void open() throws SQLException {
+    private static void open() {
         try {
             if (connection == null) {
                 connection = DriverManager.getConnection(url);
