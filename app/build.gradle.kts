@@ -7,29 +7,24 @@
  */
 
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
-    application
+  // Apply the application plugin to add support for building a CLI application in Java.
+  application
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
-    maven(url = "https://jitpack.io")
+  // Use Maven Central for resolving dependencies.
+  mavenCentral()
+  maven(url = "https://jitpack.io")
 }
 
 dependencies {
-    implementation("org.xerial:sqlite-jdbc:3.46.0.0")
-    implementation("com.github.SpaiR:imgui-java:v1.86.11")
+  implementation("org.xerial:sqlite-jdbc:3.46.0.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
+java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }
 
 application {
-    // Define the main class for the application.
-    mainClass.set("dev.lennis.school.notes.Main")
+  // Define the main class for the application.
+  mainClass.set("dev.lennis.school.notes.Main")
 }
