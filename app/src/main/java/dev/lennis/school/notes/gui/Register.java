@@ -5,8 +5,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Login extends JDialog {
-  public Login(Window owner, App ownerObjP) {
+public class Register extends JDialog {
+  public Register(Window owner, App ownerObjP) {
     super(owner);
     ownerObj = ownerObjP;
     initComponents();
@@ -15,28 +15,33 @@ public class Login extends JDialog {
   public App ownerObj;
 
   private void submit(ActionEvent e) {
-    if (Gui.login(formattedTextField1.getText(), passwordField1.getPassword())) {
-      ownerObj.login(formattedTextField1.getText());
+    if (Gui.register(
+        username.getText(), disName.getText(), password.getPassword(), conPassword.getPassword())) {
       dispose();
+      new Login(getOwner(), ownerObj);
     } else {
-      formattedTextField1.setText("");
-      passwordField1.setText("");
+      username.setText("");
+      password.setText("");
+      conPassword.setText("");
     }
   }
 
-  private void register(ActionEvent e) {
+  private void login(ActionEvent e) {
     dispose();
-    new Register(getOwner(), ownerObj);
+    new Login(getOwner(), ownerObj);
   }
 
   private void initComponents() {
     // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+    // @formatter:off
     // Generated using JFormDesigner Evaluation license - Wu Ling
     label1 = new JLabel();
-    formattedTextField1 = new JFormattedTextField();
-    passwordField1 = new JPasswordField();
+    username = new JFormattedTextField();
+    conPassword = new JPasswordField();
     button1 = new JButton();
     button2 = new JButton();
+    disName = new JFormattedTextField();
+    password = new JPasswordField();
 
     // ======== this ========
     setVisible(true);
@@ -44,40 +49,56 @@ public class Login extends JDialog {
     contentPane.setLayout(null);
 
     // ---- label1 ----
-    label1.setText("Login");
+    label1.setText("Register");
     label1.setFont(
         label1
             .getFont()
             .deriveFont(label1.getFont().getStyle() | Font.BOLD, label1.getFont().getSize() + 12f));
     contentPane.add(label1);
-    label1.setBounds(new Rectangle(new Point(80, 30), label1.getPreferredSize()));
+    label1.setBounds(new Rectangle(new Point(65, 30), label1.getPreferredSize()));
 
-    // ---- formattedTextField1 ----
-    formattedTextField1.setToolTipText("Username");
-    contentPane.add(formattedTextField1);
-    formattedTextField1.setBounds(40, 90, 145, formattedTextField1.getPreferredSize().height);
+    // ---- username ----
+    username.setToolTipText("Username");
+    contentPane.add(username);
+    username.setBounds(40, 90, 145, username.getPreferredSize().height);
 
-    // ---- passwordField1 ----
-    passwordField1.setToolTipText("Password");
-    contentPane.add(passwordField1);
-    passwordField1.setBounds(40, 150, 145, passwordField1.getPreferredSize().height);
+    // ---- conPassword ----
+    conPassword.setToolTipText("Confirm Password");
+    contentPane.add(conPassword);
+    conPassword.setBounds(40, 210, 145, conPassword.getPreferredSize().height);
 
     // ---- button1 ----
     button1.setText("Submit");
-    button1.addActionListener(e -> submit(e));
+    button1.addActionListener(
+        e -> {
+          submit(e);
+        });
     contentPane.add(button1);
-    button1.setBounds(new Rectangle(new Point(75, 210), button1.getPreferredSize()));
+    button1.setBounds(new Rectangle(new Point(75, 260), button1.getPreferredSize()));
 
     // ---- button2 ----
-    button2.setText("Or Register");
+    button2.setText("Or Login");
     button2.setFont(
         button2
             .getFont()
             .deriveFont(
                 button2.getFont().getStyle() | Font.ITALIC, button2.getFont().getSize() - 4f));
-    button2.addActionListener(e -> register(e));
+    button2.addActionListener(
+        e -> {
+          login(e);
+        });
     contentPane.add(button2);
-    button2.setBounds(new Rectangle(new Point(75, 250), button2.getPreferredSize()));
+    button2.setBounds(new Rectangle(new Point(75, 310), button2.getPreferredSize()));
+
+    // ---- disName ----
+    disName.setToolTipText("Display Name");
+    contentPane.add(disName);
+    disName.setBounds(40, 130, 145, 25);
+
+    // ---- password ----
+    password.setToolTipText("Password");
+    contentPane.add(password);
+    password.setBounds(40, 170, 145, 25);
 
     {
       // compute preferred size
@@ -93,7 +114,7 @@ public class Login extends JDialog {
       contentPane.setMinimumSize(preferredSize);
       contentPane.setPreferredSize(preferredSize);
     }
-    setSize(225, 320);
+    setSize(225, 385);
     setLocationRelativeTo(getOwner());
     setVisible(true);
     // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
@@ -102,9 +123,11 @@ public class Login extends JDialog {
   // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
   // Generated using JFormDesigner Evaluation license - Wu Ling
   private JLabel label1;
-  private JFormattedTextField formattedTextField1;
-  private JPasswordField passwordField1;
+  private JFormattedTextField username;
+  private JPasswordField conPassword;
   private JButton button1;
   private JButton button2;
+  private JFormattedTextField disName;
+  private JPasswordField password;
   // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

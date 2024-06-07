@@ -6,7 +6,7 @@ import javax.swing.*;
 public class App extends JFrame {
   public App() {
     setupWindow();
-    new Login();
+    new Login(this, this);
   }
 
   public void setupWindow() {
@@ -22,4 +22,6 @@ public class App extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setVisible(true);
   }
+
+  protected void login(String usr) {}
 }
