@@ -3,11 +3,13 @@ package dev.lennis.school.notes;
 import java.io.File;
 
 public class Main {
+
+    static File lockFile = new File("notes.lock");
+
     public static void main(String[] args) {
         // Create a lock file
-
-        File lockFile = new File("notes.lock");
         if (lockFile.exists()) {
+            lockFile = null;
             System.out.println("Another instance of the program is already running");
             System.exit(1);
         }
@@ -25,9 +27,11 @@ public class Main {
     static {
         // Delete the lock file on shutdown
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            File lockFile = new File("notes.lock");
-            if (lockFile.exists()) {
-                lockFile.delete();
+            if (Main.lockFile == null)
+                return;
+
+            if (Main.lockFile.exists()) {
+                Main.lockFile.delete();
             }
         }));
     }
