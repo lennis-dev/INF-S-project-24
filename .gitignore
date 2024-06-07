@@ -39,3 +39,6 @@ app/.classpath
 
 # Ignore notes.db which is used by the Notes app
 notes.db
+
+JFrameBuilder
+guiBuilder
