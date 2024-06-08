@@ -1,6 +1,7 @@
 package dev.lennis.school.notes.gui;
 
 import dev.lennis.school.notes.Gui;
+import dev.lennis.school.notes.User;
 import javax.swing.*;
 
 public class App extends JFrame {
@@ -23,5 +24,7 @@ public class App extends JFrame {
     setVisible(true);
   }
 
-  protected void login(String usr) {}
+  protected void login(String usr) {
+    User user = new User(usr);
+  }
 }

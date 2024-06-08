@@ -15,7 +15,7 @@ public class Login extends JDialog {
   public App ownerObj;
 
   private void submit(ActionEvent e) {
-    if (Gui.login(formattedTextField1.getText(), passwordField1.getPassword())) {
+    if (Gui.checkLogin(formattedTextField1.getText(), passwordField1.getPassword())) {
       ownerObj.login(formattedTextField1.getText());
       dispose();
     } else {

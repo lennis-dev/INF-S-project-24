@@ -67,6 +67,12 @@ public class User {
    */
   public boolean checkPassword(String password) {
     try {
+      // System.out.println(password);
+      // System.out.println(this.passwordHash);
+      // System.out.println("-----");
+      // System.out.println(this.passwordSalt);
+      // System.out.println("---");
+      // System.out.println(hashPassword(password, this.passwordSalt));
       return hashPassword(password, this.passwordSalt).equals(this.passwordHash);
     } catch (Exception e) {
       System.out.println("Error hashing password: " + e.getMessage());
