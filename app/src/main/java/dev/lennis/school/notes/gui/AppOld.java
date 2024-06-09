@@ -1,60 +1,41 @@
 package dev.lennis.school.notes.gui;
 
 import dev.lennis.school.notes.Gui;
-import dev.lennis.school.notes.Note;
 import dev.lennis.school.notes.User;
 import java.awt.*;
-import java.awt.event.*;
 import java.beans.*;
-import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.border.*;
 
-/*
- * Created by JFormDesigner on Sun Jun 09 10:40:42 CEST 2024
- */
+public class AppOld extends JFrame {
+  public AppOld() {
+    setupWindow();
+  }
 
-/**
- * @author ben
- */
-public class App extends JFrame {
-  public App() {
+  public void setupWindow() {
+    setTitle("Mint-Blow");
+
+    setBackground(Gui.backgroundColor);
+
+    setSize(500, 500); // Remove later
+    // pack(); Uncomment later
+
+    setLocationRelativeTo(null);
+    setLayout(null);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(1000, 600);
     setVisible(true);
-    new Login(this, this);
   }
 
   protected void login(String usr) {
-    initComponents();
-    setVisible(true);
     User user = new User(usr);
-
-    ArrayList<Note> notes = user.getNotes();
-    for (Note note : notes) {
-      JButton n = new JButton();
-      n.setText(note.getTitle());
-      n.addActionListener(
-          new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-              Gui.openNote(note);
-            }
-          });
-      noteListCon.add(n);
-    }
   }
 
   private void searchPropertyChange(PropertyChangeEvent e) {
     // TODO add your code here
   }
 
-  private void newNote(ActionEvent e) {
-    // TODO add your code here
-  }
-
   private void initComponents() {
     // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+    // @formatter:off
     // Generated using JFormDesigner Evaluation license - Wu Ling
     scrollPane1 = new JScrollPane();
     noteListCon = new JPanel();
@@ -76,22 +57,21 @@ public class App extends JFrame {
 
       // ======== noteListCon ========
       {
-        noteListCon.setBorder(new BevelBorder(BevelBorder.LOWERED));
         noteListCon.setBorder(
             new javax.swing.border.CompoundBorder(
                 new javax.swing.border.TitledBorder(
                     new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                    "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",
+                    "JF\u006frmDes\u0069gner \u0045valua\u0074ion",
                     javax.swing.border.TitledBorder.CENTER,
                     javax.swing.border.TitledBorder.BOTTOM,
-                    new java.awt.Font("Dia\u006cog", java.awt.Font.BOLD, 12),
+                    new java.awt.Font("D\u0069alog", java.awt.Font.BOLD, 12),
                     java.awt.Color.red),
                 noteListCon.getBorder()));
         noteListCon.addPropertyChangeListener(
             new java.beans.PropertyChangeListener() {
               @Override
               public void propertyChange(java.beans.PropertyChangeEvent e) {
-                if ("bord\u0065r".equals(e.getPropertyName())) throw new RuntimeException();
+                if ("\u0062order".equals(e.getPropertyName())) throw new RuntimeException();
               }
             });
         noteListCon.setLayout(new BoxLayout(noteListCon, BoxLayout.Y_AXIS));
@@ -103,16 +83,12 @@ public class App extends JFrame {
 
     // ======== scrollPane2 ========
     {
-
-      // ---- noteEditor ----
-      noteEditor.setBorder(new BevelBorder(BevelBorder.LOWERED));
       scrollPane2.setViewportView(noteEditor);
     }
     contentPane.add(scrollPane2);
     scrollPane2.setBounds(120, 25, 625, 470);
 
     // ---- search ----
-    search.setBorder(new BevelBorder(BevelBorder.LOWERED));
     search.addPropertyChangeListener(e -> searchPropertyChange(e));
     contentPane.add(search);
     search.setBounds(0, 25, 120, 28);
@@ -129,19 +105,18 @@ public class App extends JFrame {
 
     // ---- newNote ----
     newNote.setText("new");
-    newNote.addActionListener(e -> newNote(e));
     contentPane.add(newNote);
-    newNote.setBounds(120, 0, newNote.getPreferredSize().width, 25);
+    newNote.setBounds(new Rectangle(new Point(120, 0), newNote.getPreferredSize()));
 
     // ---- shareNote ----
     shareNote.setText("share");
     contentPane.add(shareNote);
-    shareNote.setBounds(190, 0, shareNote.getPreferredSize().width, 25);
+    shareNote.setBounds(new Rectangle(new Point(190, 0), shareNote.getPreferredSize()));
 
     // ---- button3 ----
     button3.setText("delete");
     contentPane.add(button3);
-    button3.setBounds(260, 0, button3.getPreferredSize().width, 25);
+    button3.setBounds(new Rectangle(new Point(260, 0), button3.getPreferredSize()));
 
     {
       // compute preferred size

@@ -41,11 +41,21 @@ public class Gui {
     }
 
     User user = new User(username);
-    if (!user.checkPassword(String.valueOf(password))) {
-      errorAlert("Wrong password");
-      return false;
-    }
+    // Wait for issue to be fixed
+    // if (!user.checkPassword(String.valueOf(password))) {
+    //   errorAlert("Wrong password");
+    //   return false;
+    // }
     return true;
+  }
+
+  public static ArrayList<String> getNoteTitles(User user) {
+    ArrayList<String> notes = new ArrayList<String>();
+    ArrayList<Note> notesRaw = user.getNotes();
+    for (Note note : notesRaw) {
+      notes.add(note.getTitle());
+    }
+    return notes;
   }
 
   public static boolean validateUsername(String username) {
@@ -71,7 +81,7 @@ public class Gui {
             (String.valueOf(password).length() > 30),
             "Password provided is longer then 30 characters"));
     checks.add(
-        aVC((displayName.length() > 15), "Display name provided is longer then 15 characters"));
+        aVC((displayName.length() > 7), "Display name provided is longer then 7 characters"));
     checks.add(aVC((String.valueOf(password).contains(" ")), "Password contains a space symbol"));
     checks.add(
         aVC((String.valueOf(password).contains("\\")), "Password contains a back slash \"\\\""));
@@ -89,6 +99,10 @@ public class Gui {
       }
     }
     User.createUser(username, displayName, password.toString());
+    return true;
+  }
+
+  public static boolean openNote(Note note) {
     return true;
   }
 }

@@ -95,6 +95,7 @@ public class Login extends JDialog {
     }
     setSize(225, 320);
     setLocationRelativeTo(getOwner());
+    setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     setVisible(true);
     // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
   }
