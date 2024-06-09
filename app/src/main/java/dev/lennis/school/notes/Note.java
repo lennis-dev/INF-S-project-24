@@ -6,7 +6,7 @@ public class Note {
     private int id;
     private String username;
     private String heading;
-    private String title;
+    private String text;
     private ArrayList<String> tags;
 
     static public ArrayList<Note> getNotes() {
@@ -43,7 +43,7 @@ public class Note {
         ArrayList<String> note = Data.getNoteById(id);
         this.username = note.get(1);
         this.heading = note.get(2);
-        this.title = note.get(3);
+        this.text = note.get(3);
         this.tags = Data.getTagsByNoteId(id);
     }
 
@@ -59,8 +59,8 @@ public class Note {
         return heading;
     }
 
-    public String getTitle() {
-        return title;
+    public String getText() {
+        return text;
     }
 
     public ArrayList<String> getTags() {
@@ -73,7 +73,7 @@ public class Note {
     }
 
     public void setText(String text) {
-        this.title = text;
+        this.text = text;
         Data.updateNoteText(id, text);
     }
 
