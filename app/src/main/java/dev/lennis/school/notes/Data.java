@@ -103,4 +103,22 @@ public class Data {
     public static void deleteUserByUsername(String username) {
         Database.execute("DELETE FROM users WHERE username = ?", new String[] { username }, true);
     }
+
+    /* == PERMISSIONS == */
+
+    public static void addPermission(int noteID, String username, boolean permissionMode) {
+        Database.execute("INSERT INTO permissions (noteID, username, permissionMode) VALUES (?, ?, ?)", new String[] { Integer.toString(noteID), username, permissionMode ? "1" : "0" }, true);
+    }
+
+    public static void removePermission(int noteID, String username, boolean permissionMode) {
+        Database.execute("DELETE FROM permissions WHERE permissions.noteID = notes.noteID AND permissions.username = users.username", new String[] { Integer.toString(noteID), username, permissionMode ? "1" : "0" }, true);
+    }
+
+    public static void changePermission(boolean permissionMode, int noteID, String username) {
+        Database.execute("UPDATE permissions SET permissionMode = ? WHERE permissions.noteID = notes.noteID AND permissions.username = users.username", new String[] { permissionMode ? "1" : "0", Integer.toString(noteID), username }, true);
+    }
+
+    public static ArrayList<ArrayList<String>> getPermissionByUsername(String username) {
+        return Database.execute("SELECT * FROM permissions WHERE username = ?", new String[] { username }, false);
+    }
 }
