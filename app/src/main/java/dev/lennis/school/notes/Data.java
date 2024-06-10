@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 public class Data {
     /* == NOTES == */
+    public static ArrayList<ArrayList<String>> getNotesBySearch(String username,  String search)
+    {
+        return Database.execute("SELECT id FROM notes WHERE username = ? AND text LIKE %?% OR heading LIKE %?%", new String[]{username, search, search}, false);
+    }
 
     public static ArrayList<ArrayList<String>> getNotes() {
         return Database.execute("SELECT * FROM notes", new String[0], false);
