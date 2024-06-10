@@ -8,7 +8,6 @@ import java.awt.event.*;
 import java.beans.*;
 import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.border.*;
 
 /*
  * Created by JFormDesigner on Sun Jun 09 10:40:42 CEST 2024
@@ -25,154 +24,226 @@ public class App extends JFrame {
     new Login(this, this);
   }
 
+  private Note currentNote;
+  private User currentUser;
+
   protected void login(String usr) {
     initComponents();
     setVisible(true);
-    User user = new User(usr);
+    currentUser = new User(usr);
 
-    ArrayList<Note> notes = user.getNotes();
-    for (Note note : notes) {
-      JButton n = new JButton();
-      n.setText(note.getTitle());
-      n.addActionListener(
-          new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-              Gui.openNote(note);
-            }
-          });
-      noteListCon.add(n);
+    displayName.setText(currentUser.getDisplayName());
+
+    ArrayList<Note> notes = currentUser.getNotes();
+    if (notes.isEmpty()) {
+      newNote("Untitled");
+    } else {
+      for (Note note : notes) {
+        JButton n = new JButton();
+        n.setText(note.getHeading());
+        n.addActionListener(
+            new ActionListener() {
+              @Override
+              public void actionPerformed(ActionEvent e) {
+                openNote(note);
+              }
+            });
+        n.setVisible(true);
+        noteList.add(n);
+      }
+
+      openNote(notes.getFirst());
     }
+  }
+
+  private void newNote(String name) {
+    openNote(Note.addNote(currentUser.getUsername(), name, ""));
+  }
+
+  private void openNote(Note note) {
+    currentNote = note;
+    noteName.setText(note.getHeading());
+    String noteContents = note.getTitle();
+    noteEditor.setText(noteContents);
+  }
+
+  private boolean noteExists(String name) {
+    ArrayList<Note> notes = currentUser.getNotes();
+    for (Note note : notes) {
+      if (note.getTitle() == name) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private void newNoteBtn(ActionEvent e) {
+    String name = "tmp";
+    if (noteExists(name)) {
+      Gui.errorAlert(String.format("Note \"%s\" does already exist", name));
+    } else {
+      newNote(name);
+    }
+  }
+
+  private void saveBtn(ActionEvent e) {
+    currentNote.setText(noteEditor.getText());
+  }
+
+  private void deleteBtn(ActionEvent e) {
+    // TODO add your code here
+  }
+
+  private void shareBtn(ActionEvent e) {
+    // TODO add your code here
+  }
+
+  private void changeModeBtn(ActionEvent e) {
+    // TODO add your code here
   }
 
   private void searchPropertyChange(PropertyChangeEvent e) {
     // TODO add your code here
   }
 
-  private void newNote(ActionEvent e) {
-    // TODO add your code here
-  }
-
   private void initComponents() {
     // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
     // Generated using JFormDesigner Evaluation license - Wu Ling
-    scrollPane1 = new JScrollPane();
-    noteListCon = new JPanel();
-    scrollPane2 = new JScrollPane();
-    noteEditor = new JEditorPane();
-    search = new JEditorPane();
-    account = new JButton();
-    changeMode = new JButton();
+    panel1 = new JPanel();
+    displayName = new JButton();
     newNote = new JButton();
+    deleteNote = new JButton();
     shareNote = new JButton();
-    button3 = new JButton();
+    save = new JButton();
+    button5 = new JButton();
+    button6 = new JButton();
+    changeMode = new JButton();
+    noteName = new JLabel();
+    panel2 = new JPanel();
+    noteList = new JScrollPane();
+    panel3 = new JPanel();
+    searchField = new JTextField();
+    tagBox = new JComboBox();
+    scrollPane1 = new JScrollPane();
+    noteEditor = new JTextArea();
 
     // ======== this ========
     Container contentPane = getContentPane();
-    contentPane.setLayout(null);
+    contentPane.setLayout(new BorderLayout());
+
+    // ======== panel1 ========
+    {
+      panel1.setBorder(
+          new javax.swing.border.CompoundBorder(
+              new javax.swing.border.TitledBorder(
+                  new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                  "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e",
+                  javax.swing.border.TitledBorder.CENTER,
+                  javax.swing.border.TitledBorder.BOTTOM,
+                  new java.awt.Font("Dialo\u0067", java.awt.Font.BOLD, 12),
+                  java.awt.Color.red),
+              panel1.getBorder()));
+      panel1.addPropertyChangeListener(
+          new java.beans.PropertyChangeListener() {
+            @Override
+            public void propertyChange(java.beans.PropertyChangeEvent e) {
+              if ("borde\u0072".equals(e.getPropertyName())) throw new RuntimeException();
+            }
+          });
+      panel1.setLayout(new BoxLayout(panel1, BoxLayout.X_AXIS));
+
+      // ---- displayName ----
+      displayName.setText("DisplayName");
+      panel1.add(displayName);
+
+      // ---- newNote ----
+      newNote.setText("new");
+      newNote.addActionListener(e -> newNoteBtn(e));
+      panel1.add(newNote);
+
+      // ---- deleteNote ----
+      deleteNote.setText("delete");
+      deleteNote.addActionListener(e -> deleteBtn(e));
+      panel1.add(deleteNote);
+
+      // ---- shareNote ----
+      shareNote.setText("share");
+      shareNote.addActionListener(e -> shareBtn(e));
+      panel1.add(shareNote);
+
+      // ---- save ----
+      save.setText("save");
+      save.addActionListener(e -> saveBtn(e));
+      panel1.add(save);
+
+      // ---- button5 ----
+      button5.setText("add Tag");
+      panel1.add(button5);
+
+      // ---- button6 ----
+      button6.setText("delete Tag");
+      panel1.add(button6);
+
+      // ---- changeMode ----
+      changeMode.setText("Read mode");
+      changeMode.addActionListener(e -> changeModeBtn(e));
+      panel1.add(changeMode);
+
+      // ---- noteName ----
+      noteName.setText("noteName");
+      noteName.setHorizontalAlignment(SwingConstants.CENTER);
+      panel1.add(noteName);
+    }
+    contentPane.add(panel1, BorderLayout.NORTH);
+
+    // ======== panel2 ========
+    {
+      panel2.setLayout(new BorderLayout());
+      panel2.add(noteList, BorderLayout.CENTER);
+
+      // ======== panel3 ========
+      {
+        panel3.setLayout(new BoxLayout(panel3, BoxLayout.X_AXIS));
+
+        // ---- searchField ----
+        searchField.setMinimumSize(new Dimension(100, 25));
+        searchField.setPreferredSize(new Dimension(80, 25));
+        searchField.addPropertyChangeListener(e -> searchPropertyChange(e));
+        panel3.add(searchField);
+        panel3.add(tagBox);
+      }
+      panel2.add(panel3, BorderLayout.NORTH);
+    }
+    contentPane.add(panel2, BorderLayout.WEST);
 
     // ======== scrollPane1 ========
     {
-
-      // ======== noteListCon ========
-      {
-        noteListCon.setBorder(new BevelBorder(BevelBorder.LOWERED));
-        noteListCon.setBorder(
-            new javax.swing.border.CompoundBorder(
-                new javax.swing.border.TitledBorder(
-                    new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                    "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",
-                    javax.swing.border.TitledBorder.CENTER,
-                    javax.swing.border.TitledBorder.BOTTOM,
-                    new java.awt.Font("Dia\u006cog", java.awt.Font.BOLD, 12),
-                    java.awt.Color.red),
-                noteListCon.getBorder()));
-        noteListCon.addPropertyChangeListener(
-            new java.beans.PropertyChangeListener() {
-              @Override
-              public void propertyChange(java.beans.PropertyChangeEvent e) {
-                if ("bord\u0065r".equals(e.getPropertyName())) throw new RuntimeException();
-              }
-            });
-        noteListCon.setLayout(new BoxLayout(noteListCon, BoxLayout.Y_AXIS));
-      }
-      scrollPane1.setViewportView(noteListCon);
+      scrollPane1.setViewportView(noteEditor);
     }
-    contentPane.add(scrollPane1);
-    scrollPane1.setBounds(0, 50, 120, 445);
-
-    // ======== scrollPane2 ========
-    {
-
-      // ---- noteEditor ----
-      noteEditor.setBorder(new BevelBorder(BevelBorder.LOWERED));
-      scrollPane2.setViewportView(noteEditor);
-    }
-    contentPane.add(scrollPane2);
-    scrollPane2.setBounds(120, 25, 625, 470);
-
-    // ---- search ----
-    search.setBorder(new BevelBorder(BevelBorder.LOWERED));
-    search.addPropertyChangeListener(e -> searchPropertyChange(e));
-    contentPane.add(search);
-    search.setBounds(0, 25, 120, 28);
-
-    // ---- account ----
-    account.setText("DisplayName");
-    contentPane.add(account);
-    account.setBounds(0, 0, 120, 25);
-
-    // ---- changeMode ----
-    changeMode.setText("Read Mode");
-    contentPane.add(changeMode);
-    changeMode.setBounds(630, 0, 115, changeMode.getPreferredSize().height);
-
-    // ---- newNote ----
-    newNote.setText("new");
-    newNote.addActionListener(e -> newNote(e));
-    contentPane.add(newNote);
-    newNote.setBounds(120, 0, newNote.getPreferredSize().width, 25);
-
-    // ---- shareNote ----
-    shareNote.setText("share");
-    contentPane.add(shareNote);
-    shareNote.setBounds(190, 0, shareNote.getPreferredSize().width, 25);
-
-    // ---- button3 ----
-    button3.setText("delete");
-    contentPane.add(button3);
-    button3.setBounds(260, 0, button3.getPreferredSize().width, 25);
-
-    {
-      // compute preferred size
-      Dimension preferredSize = new Dimension();
-      for (int i = 0; i < contentPane.getComponentCount(); i++) {
-        Rectangle bounds = contentPane.getComponent(i).getBounds();
-        preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-        preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-      }
-      Insets insets = contentPane.getInsets();
-      preferredSize.width += insets.right;
-      preferredSize.height += insets.bottom;
-      contentPane.setMinimumSize(preferredSize);
-      contentPane.setPreferredSize(preferredSize);
-    }
-    pack();
+    contentPane.add(scrollPane1, BorderLayout.CENTER);
+    setSize(745, 465);
     setLocationRelativeTo(getOwner());
     // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
   }
 
   // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
   // Generated using JFormDesigner Evaluation license - Wu Ling
-  private JScrollPane scrollPane1;
-  private JPanel noteListCon;
-  private JScrollPane scrollPane2;
-  private JEditorPane noteEditor;
-  private JEditorPane search;
-  private JButton account;
-  private JButton changeMode;
+  private JPanel panel1;
+  private JButton displayName;
   private JButton newNote;
+  private JButton deleteNote;
   private JButton shareNote;
-  private JButton button3;
+  private JButton save;
+  private JButton button5;
+  private JButton button6;
+  private JButton changeMode;
+  private JLabel noteName;
+  private JPanel panel2;
+  private JScrollPane noteList;
+  private JPanel panel3;
+  private JTextField searchField;
+  private JComboBox tagBox;
+  private JScrollPane scrollPane1;
+  private JTextArea noteEditor;
   // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

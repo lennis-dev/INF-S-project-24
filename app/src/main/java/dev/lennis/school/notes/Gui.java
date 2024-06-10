@@ -41,11 +41,10 @@ public class Gui {
     }
 
     User user = new User(username);
-    // Wait for issue to be fixed
-    // if (!user.checkPassword(String.valueOf(password))) {
-    //   errorAlert("Wrong password");
-    //   return false;
-    // }
+    if (!user.checkPassword(String.valueOf(password))) {
+      errorAlert("Wrong password");
+      return false;
+    }
     return true;
   }
 
@@ -91,18 +90,15 @@ public class Gui {
             "The username contains invalid characters, allowed are a-z, A-Z, 0-9 as well as _"));
     checks.add(aVC((displayName.contains(" ")), "Display name contains a space symbol"));
     checks.add(aVC((displayName.contains("\\")), "Display name contains a back slash \"\\\""));
-
+    checks.add(
+        aVC(User.userExists(username), String.format("User: \"%s\" does already exist", username)));
     for (Object[] check : checks) {
       if ((boolean) check[0]) {
         errorAlert((String) check[1]);
         return false;
       }
     }
-    User.createUser(username, displayName, password.toString());
-    return true;
-  }
-
-  public static boolean openNote(Note note) {
+    User.createUser(username, displayName, String.valueOf(password));
     return true;
   }
 }

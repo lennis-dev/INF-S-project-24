@@ -116,7 +116,7 @@ public class Register extends JDialog {
     }
     setSize(225, 385);
     setLocationRelativeTo(getOwner());
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     setVisible(true);
     // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
   }
