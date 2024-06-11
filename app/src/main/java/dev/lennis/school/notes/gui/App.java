@@ -65,6 +65,10 @@ public class App extends JFrame {
   }
 
   private void refreshNoteView() {
+    int len = noteList.getComponentCount();
+    for (int i = 0; i < len; i++) {
+      noteList.getComponent(i).setVisible(false);
+    }
     noteList.removeAll();
     ArrayList<Note> notes = currentUser.getNotes();
     if (notes.isEmpty()) {
