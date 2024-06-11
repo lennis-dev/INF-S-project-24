@@ -8,15 +8,17 @@ public class Note {
     private String heading;
     private String title;
     private ArrayList<String> tags;
-    private boolean permission = true; 
+    private boolean permission = true;
+    private ArrayList<String> readAccess;
+    private ArrayList<String> writeAccess;
 
-    static public ArrayList<Note> getSharedNotes(String username){
+    static public ArrayList<Note> getSharedNotes(String username) {
         ArrayList<Note> notes = new ArrayList<Note>();
-        for(ArrayList<String> note : Data.getSharedNotesByUsername(username)){
+        for (ArrayList<String> note : Data.getSharedNotesByUsername(username)) {
             Note noteTmp = new Note(Integer.valueOf(note.get(0)));
-            if(note.get(1).equals("1")){
+            if (note.get(1).equals("1")) {
                 noteTmp.setPermission(true);
-            }else{
+            } else {
                 noteTmp.setPermission(false);
             }
         }
@@ -59,14 +61,38 @@ public class Note {
         this.heading = note.get(2);
         this.title = note.get(3);
         this.tags = Data.getTagsByNoteId(id);
+        this.readAccess = Data.getReadAccessByNoteId(id);
+        this.writeAccess = Data.getWriteAccessByNoteId(id);
     }
 
     public int getId() {
         return id;
     }
 
-    public void addShare(String username, boolean mode){
+    public void addShare(String username, boolean mode) {
+        if (mode) {
+            readAccess.add(username);
+        } else {
+            writeAccess.add(username);
+        }
         Data.addPermission(this.id, username, mode);
+    }
+
+    public void removeShare(String username, boolean mode) {
+        if (mode) {
+            readAccess.remove(username);
+        } else {
+            writeAccess.remove(username);
+        }
+        Data.removePermission(this.id, username, mode);
+    }
+
+    public ArrayList<String> getReadAccess() {
+        return readAccess;
+    }
+
+    public ArrayList<String> getWriteAccess() {
+        return writeAccess;
     }
 
     public String getUsername() {
@@ -89,7 +115,7 @@ public class Note {
         return permission;
     }
 
-    public void setPermission(Boolean permission){
+    public void setPermission(Boolean permission) {
         this.permission = permission;
     }
 
