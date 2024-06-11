@@ -91,6 +91,9 @@ public class App extends JFrame {
 
   private void newNoteBtn(ActionEvent e) {
     String name = showInputDialog("Please enther the heading of the note");
+    if (name.equals(name)) {
+      return;
+    }
     if (noteExists(name)) {
       Gui.errorAlert(String.format("Note \"%s\" does already exist", name));
     } else {
