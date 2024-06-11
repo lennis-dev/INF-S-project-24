@@ -37,6 +37,36 @@ public class App extends JFrame {
     displayName.setText(currentUser.getDisplayName());
 
     ArrayList<Note> notes = currentUser.getNotes();
+    refreshNoteView();
+
+    openNote(notes.getFirst());
+  }
+
+  private void newNote(String name) {
+    openNote(Note.addNote(currentUser.getUsername(), name, ""));
+    refreshNoteView();
+  }
+
+  private void openNote(Note note) {
+    currentNote = note;
+    noteName.setText(note.getHeading());
+    String noteContents = note.getText();
+    noteEditor.setText(noteContents);
+  }
+
+  private boolean noteExists(String name) {
+    ArrayList<Note> notes = currentUser.getNotes();
+    for (Note note : notes) {
+      if (note.getHeading().equals(name)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private void refreshNoteView() {
+    noteList.removeAll();
+    ArrayList<Note> notes = currentUser.getNotes();
     if (notes.isEmpty()) {
       newNote("Untitled");
     } else {
@@ -50,38 +80,13 @@ public class App extends JFrame {
                 openNote(note);
               }
             });
-
-        n.setVisible(true);
         noteList.add(n);
       }
-
-      openNote(notes.getFirst());
     }
-  }
-
-  private void newNote(String name) {
-    openNote(Note.addNote(currentUser.getUsername(), name, ""));
-  }
-
-  private void openNote(Note note) {
-    currentNote = note;
-    noteName.setText(note.getHeading());
-    String noteContents = note.getText();
-    noteEditor.setText(noteContents);
-  }
-
-  private boolean noteExists(String name) {
-    ArrayList<Note> notes = currentUser.getNotes();
-    for (Note note : notes) {
-      if (note.getHeading() == name) {
-        return true;
-      }
-    }
-    return false;
   }
 
   private void newNoteBtn(ActionEvent e) {
-    String name = "tmp";
+    String name = showInputDialog("Please enther the heading of the note");
     if (noteExists(name)) {
       Gui.errorAlert(String.format("Note \"%s\" does already exist", name));
     } else {
@@ -103,7 +108,19 @@ public class App extends JFrame {
   }
 
   private void deleteBtn(ActionEvent e) {
-    // TODO add your code here
+    String heading =
+        showInputDialog(
+            String.format(
+                "Are you sure you want to delete \"%s\". \n"
+                    + "To confirm type the heading of the note",
+                currentNote.getHeading()));
+    if (currentNote.getHeading().equals(heading)) {
+      currentNote.delete();
+      refreshNoteView();
+      openNote(currentUser.getNotes().getFirst());
+    } else {
+      Gui.errorAlert("Headings do not match, aborting");
+    }
   }
 
   private void shareBtn(ActionEvent e) {

@@ -18,6 +18,7 @@ repositories {
 dependencies {
   implementation 'com.miglayout:miglayout-swing:11.3'
   implementation 'org.xerial:sqlite-jdbc:3.46.0.0'
+  implementation 'com.formdev:flatlaf-intellij-themes:3.4.1'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
