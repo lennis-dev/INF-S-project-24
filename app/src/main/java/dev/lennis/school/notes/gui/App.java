@@ -1,5 +1,7 @@
 package dev.lennis.school.notes.gui;
 
+import static javax.swing.JOptionPane.showInputDialog;
+
 import dev.lennis.school.notes.Gui;
 import dev.lennis.school.notes.Note;
 import dev.lennis.school.notes.User;
@@ -48,6 +50,7 @@ public class App extends JFrame {
                 openNote(note);
               }
             });
+
         n.setVisible(true);
         noteList.add(n);
       }
@@ -63,14 +66,14 @@ public class App extends JFrame {
   private void openNote(Note note) {
     currentNote = note;
     noteName.setText(note.getHeading());
-    String noteContents = note.getTitle();
+    String noteContents = note.getText();
     noteEditor.setText(noteContents);
   }
 
   private boolean noteExists(String name) {
     ArrayList<Note> notes = currentUser.getNotes();
     for (Note note : notes) {
-      if (note.getTitle() == name) {
+      if (note.getHeading() == name) {
         return true;
       }
     }
@@ -83,6 +86,15 @@ public class App extends JFrame {
       Gui.errorAlert(String.format("Note \"%s\" does already exist", name));
     } else {
       newNote(name);
+    }
+  }
+
+  private void openNoteBtn(ActionEvent e) {
+    String heading = showInputDialog("Please enter the name of the note you want to open");
+    if (noteExists(heading)) {
+      openNote(currentUser.getNoteByHeading(heading));
+    } else {
+      Gui.errorAlert(String.format("Note \"%s\" does not exist", heading));
     }
   }
 
@@ -112,18 +124,21 @@ public class App extends JFrame {
     panel1 = new JPanel();
     displayName = new JButton();
     newNote = new JButton();
+    openNote = new JButton();
     deleteNote = new JButton();
     shareNote = new JButton();
     save = new JButton();
-    button5 = new JButton();
-    button6 = new JButton();
+    rename = new JButton();
+    addTag = new JButton();
+    delTag = new JButton();
     changeMode = new JButton();
     noteName = new JLabel();
     panel2 = new JPanel();
-    noteList = new JScrollPane();
     panel3 = new JPanel();
     searchField = new JTextField();
     tagBox = new JComboBox();
+    scrollPane2 = new JScrollPane();
+    noteList = new JPanel();
     scrollPane1 = new JScrollPane();
     noteEditor = new JTextArea();
 
@@ -133,21 +148,22 @@ public class App extends JFrame {
 
     // ======== panel1 ========
     {
+      panel1.setBorder(null);
       panel1.setBorder(
           new javax.swing.border.CompoundBorder(
               new javax.swing.border.TitledBorder(
                   new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                  "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e",
+                  "JF\u006frmDes\u0069gner \u0045valua\u0074ion",
                   javax.swing.border.TitledBorder.CENTER,
                   javax.swing.border.TitledBorder.BOTTOM,
-                  new java.awt.Font("Dialo\u0067", java.awt.Font.BOLD, 12),
+                  new java.awt.Font("D\u0069alog", java.awt.Font.BOLD, 12),
                   java.awt.Color.red),
               panel1.getBorder()));
       panel1.addPropertyChangeListener(
           new java.beans.PropertyChangeListener() {
             @Override
             public void propertyChange(java.beans.PropertyChangeEvent e) {
-              if ("borde\u0072".equals(e.getPropertyName())) throw new RuntimeException();
+              if ("\u0062order".equals(e.getPropertyName())) throw new RuntimeException();
             }
           });
       panel1.setLayout(new BoxLayout(panel1, BoxLayout.X_AXIS));
@@ -160,6 +176,11 @@ public class App extends JFrame {
       newNote.setText("new");
       newNote.addActionListener(e -> newNoteBtn(e));
       panel1.add(newNote);
+
+      // ---- openNote ----
+      openNote.setText("open");
+      openNote.addActionListener(e -> openNoteBtn(e));
+      panel1.add(openNote);
 
       // ---- deleteNote ----
       deleteNote.setText("delete");
@@ -176,13 +197,17 @@ public class App extends JFrame {
       save.addActionListener(e -> saveBtn(e));
       panel1.add(save);
 
-      // ---- button5 ----
-      button5.setText("add Tag");
-      panel1.add(button5);
+      // ---- rename ----
+      rename.setText("rename");
+      panel1.add(rename);
 
-      // ---- button6 ----
-      button6.setText("delete Tag");
-      panel1.add(button6);
+      // ---- addTag ----
+      addTag.setText("add Tag");
+      panel1.add(addTag);
+
+      // ---- delTag ----
+      delTag.setText("delete Tag");
+      panel1.add(delTag);
 
       // ---- changeMode ----
       changeMode.setText("Read mode");
@@ -199,7 +224,6 @@ public class App extends JFrame {
     // ======== panel2 ========
     {
       panel2.setLayout(new BorderLayout());
-      panel2.add(noteList, BorderLayout.CENTER);
 
       // ======== panel3 ========
       {
@@ -213,6 +237,17 @@ public class App extends JFrame {
         panel3.add(tagBox);
       }
       panel2.add(panel3, BorderLayout.NORTH);
+
+      // ======== scrollPane2 ========
+      {
+
+        // ======== noteList ========
+        {
+          noteList.setLayout(new BoxLayout(noteList, BoxLayout.Y_AXIS));
+        }
+        scrollPane2.setViewportView(noteList);
+      }
+      panel2.add(scrollPane2, BorderLayout.CENTER);
     }
     contentPane.add(panel2, BorderLayout.WEST);
 
@@ -221,7 +256,7 @@ public class App extends JFrame {
       scrollPane1.setViewportView(noteEditor);
     }
     contentPane.add(scrollPane1, BorderLayout.CENTER);
-    setSize(745, 465);
+    setSize(870, 545);
     setLocationRelativeTo(getOwner());
     // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
   }
@@ -231,18 +266,21 @@ public class App extends JFrame {
   private JPanel panel1;
   private JButton displayName;
   private JButton newNote;
+  private JButton openNote;
   private JButton deleteNote;
   private JButton shareNote;
   private JButton save;
-  private JButton button5;
-  private JButton button6;
+  private JButton rename;
+  private JButton addTag;
+  private JButton delTag;
   private JButton changeMode;
   private JLabel noteName;
   private JPanel panel2;
-  private JScrollPane noteList;
   private JPanel panel3;
   private JTextField searchField;
   private JComboBox tagBox;
+  private JScrollPane scrollPane2;
+  private JPanel noteList;
   private JScrollPane scrollPane1;
   private JTextArea noteEditor;
   // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on

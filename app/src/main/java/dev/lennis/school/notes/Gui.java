@@ -52,7 +52,7 @@ public class Gui {
     ArrayList<String> notes = new ArrayList<String>();
     ArrayList<Note> notesRaw = user.getNotes();
     for (Note note : notesRaw) {
-      notes.add(note.getTitle());
+      notes.add(note.getText());
     }
     return notes;
   }
