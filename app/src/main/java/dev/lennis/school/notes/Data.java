@@ -118,7 +118,7 @@ public class Data {
         Database.execute("UPDATE permissions SET permissionMode = ? WHERE permissions.noteID = notes.noteID AND permissions.username = users.username", new String[] { permissionMode ? "1" : "0", Integer.toString(noteID), username }, true);
     }
 
-    public static ArrayList<ArrayList<String>> getPermissionByUsername(String username) {
-        return Database.execute("SELECT * FROM permissions WHERE username = ?", new String[] { username }, false);
+    public static ArrayList<ArrayList<String>> getSharedNotesByUsername(String username) {
+        return Database.execute("SELECT noteID, permissionMode FROM permissions WHERE username = ?", new String[] { username }, false);
     }
 }

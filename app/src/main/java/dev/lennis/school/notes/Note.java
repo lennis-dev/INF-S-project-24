@@ -8,6 +8,20 @@ public class Note {
     private String heading;
     private String title;
     private ArrayList<String> tags;
+    private boolean permission = true; 
+
+    static public ArrayList<Note> getSharedNotes(String username){
+        ArrayList<Note> notes = new ArrayList<Note>();
+        for(ArrayList<String> note : Data.getSharedNotesByUsername(username)){
+            Note noteTmp = new Note(Integer.valueOf(note.get(0)));
+            if(note.get(1).equals("1")){
+                noteTmp.setPermission(true);
+            }else{
+                noteTmp.setPermission(false);
+            }
+        }
+        return notes;
+    }
 
     static public ArrayList<Note> getNotes() {
         ArrayList<Note> notes = new ArrayList<Note>();
@@ -51,6 +65,10 @@ public class Note {
         return id;
     }
 
+    public void addShare(String username, boolean mode){
+        Data.addPermission(this.id, username, mode);
+    }
+
     public String getUsername() {
         return username;
     }
@@ -65,6 +83,14 @@ public class Note {
 
     public ArrayList<String> getTags() {
         return tags;
+    }
+
+    public boolean getPermission() {
+        return permission;
+    }
+
+    public void setPermission(Boolean permission){
+        this.permission = permission;
     }
 
     public void setHeading(String heading) {
