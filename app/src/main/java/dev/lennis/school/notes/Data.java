@@ -4,9 +4,15 @@ import java.util.ArrayList;
 
 public class Data {
     /* == NOTES == */
-    public static ArrayList<ArrayList<String>> getNotesBySearch(String username, String search) {
-        return Database.execute("SELECT id FROM notes WHERE username = ? AND (text LIKE ? OR heading LIKE ?)",
+    public static ArrayList<Integer> getNotesBySearch(String username, String search) {
+        ArrayList<ArrayList<String>> data = Database.execute("SELECT id FROM notes WHERE username = ? AND (text LIKE ? OR heading LIKE ?)",
                 new String[] { username, "%" + search + "%", "%" + search + "%" }, false);
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        for(ArrayList<String> row : data){
+            result.add(Integer.valueOf(row.get(0)));
+        }
+        return result;
+
     }
 
     public static ArrayList<ArrayList<String>> getNotes() {

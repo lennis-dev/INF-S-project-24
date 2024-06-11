@@ -9,6 +9,14 @@ public class Note {
     private String text;
     private ArrayList<String> tags;
 
+    static public ArrayList<Note> getNotesBySearch(String username, String search){
+        ArrayList<Note> notes = new ArrayList<Note>();
+        for (int note : Data.getNotesBySearch(username, search)){
+            notes.add(new Note(note));
+        }
+        return notes;
+    }
+
     static public ArrayList<Note> getNotes() {
         ArrayList<Note> notes = new ArrayList<Note>();
         for (ArrayList<String> note : Data.getNotes()) {
