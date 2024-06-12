@@ -91,7 +91,7 @@ public class App extends JFrame {
 
   private void newNoteBtn(ActionEvent e) {
     String name = showInputDialog("Please enther the heading of the note");
-    if (name.equals(name)) {
+    if (name.equals("null")) {
       return;
     }
     if (noteExists(name)) {
@@ -140,6 +140,14 @@ public class App extends JFrame {
 
   private void searchPropertyChange(PropertyChangeEvent e) {
     // TODO add your code here
+  }
+
+  private void rename(ActionEvent e) {
+    String heading = showInputDialog("Please enter the new note title");
+    if (!heading.equals("null") || !heading.isBlank()) {
+      currentNote.setHeading(heading);
+      refreshNoteView();
+    }
   }
 
   private void initComponents() {
@@ -223,6 +231,7 @@ public class App extends JFrame {
 
       // ---- rename ----
       rename.setText("rename");
+      rename.addActionListener(e -> rename(e));
       panel1.add(rename);
 
       // ---- addTag ----
