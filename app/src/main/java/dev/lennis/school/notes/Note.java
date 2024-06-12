@@ -95,6 +95,20 @@ public class Note {
         return writeAccess;
     }
 
+    public void addReadAccess(String username) {
+        if (readAccess.contains(username))
+            return;
+        readAccess.add(username);
+        Data.addPermission(this.id, username, false);
+    }
+
+    public void addWriteAccess(String username) {
+        if (writeAccess.contains(username))
+            return;
+        writeAccess.add(username);
+        Data.addPermission(this.id, username, true);
+    }
+
     public String getUsername() {
         return username;
     }

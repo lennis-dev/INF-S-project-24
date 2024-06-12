@@ -107,18 +107,44 @@ public class Data {
     /* == PERMISSIONS == */
 
     public static void addPermission(int noteID, String username, boolean permissionMode) {
-        Database.execute("INSERT INTO permissions (noteID, username, permissionMode) VALUES (?, ?, ?)", new String[] { Integer.toString(noteID), username, permissionMode ? "1" : "0" }, true);
+        Database.execute("INSERT INTO permissions (noteID, username, permissionMode) VALUES (?, ?, ?)",
+                new String[] { Integer.toString(noteID), username, permissionMode ? "1" : "0" }, true);
     }
 
     public static void removePermission(int noteID, String username, boolean permissionMode) {
-        Database.execute("DELETE FROM permissions WHERE permissions.noteID = notes.noteID AND permissions.username = users.username", new String[] { Integer.toString(noteID), username, permissionMode ? "1" : "0" }, true);
+        Database.execute(
+                "DELETE FROM permissions WHERE noteID = ? AND username = ? AND permissionMode = ?",
+                new String[] { Integer.toString(noteID), username, permissionMode ? "1" : "0" }, true);
     }
 
     public static void changePermission(boolean permissionMode, int noteID, String username) {
-        Database.execute("UPDATE permissions SET permissionMode = ? WHERE permissions.noteID = notes.noteID AND permissions.username = users.username", new String[] { permissionMode ? "1" : "0", Integer.toString(noteID), username }, true);
+        Database.execute(
+                "UPDATE permissions SET permissionMode = ? WHERE noteID = ? AND username = ?",
+                new String[] { permissionMode ? "1" : "0", Integer.toString(noteID), username }, true);
     }
 
     public static ArrayList<ArrayList<String>> getSharedNotesByUsername(String username) {
-        return Database.execute("SELECT noteID, permissionMode FROM permissions WHERE username = ?", new String[] { username }, false);
+        return Database.execute("SELECT noteID, permissionMode FROM permissions WHERE username = ?",
+                new String[] { username }, false);
+    }
+
+    public static ArrayList<String> getReadAccessByNoteId(int noteId) {
+        ArrayList<String> readAccess = new ArrayList<String>();
+        for (ArrayList<String> user : Database.execute(
+                "SELECT username FROM permissions WHERE noteID = ? AND permissionMode = 0",
+                new String[] { Integer.toString(noteId) }, false)) {
+            readAccess.add(user.get(0));
+        }
+        return readAccess;
+    }
+
+    public static ArrayList<String> getWriteAccessByNoteId(int noteId) {
+        ArrayList<String> writeAccess = new ArrayList<String>();
+        for (ArrayList<String> user : Database.execute(
+                "SELECT username FROM permissions WHERE noteID = ? AND permissionMode = 1",
+                new String[] { Integer.toString(noteId) }, false)) {
+            writeAccess.add(user.get(0));
+        }
+        return writeAccess;
     }
 }
