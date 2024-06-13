@@ -38,7 +38,6 @@ app/.classpath
 .vscode
 
 # Ignore notes.db which is used by the Notes app
-<<<<<<< HEAD
 notes.db
 
 # JFrame Builder
