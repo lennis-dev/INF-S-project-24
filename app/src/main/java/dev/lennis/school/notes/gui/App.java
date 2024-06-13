@@ -8,6 +8,8 @@ import dev.lennis.school.notes.User;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -40,6 +42,7 @@ public class App extends JFrame {
     refreshNoteView();
 
     openNote(notes.getFirst());
+    refreshTagView();
   }
 
   private void newNote(String name) {
@@ -52,6 +55,7 @@ public class App extends JFrame {
     noteName.setText(note.getHeading());
     String noteContents = note.getText();
     noteEditor.setText(noteContents);
+    refreshTagView();
   }
 
   private boolean noteExists(String name) {
@@ -64,16 +68,48 @@ public class App extends JFrame {
     return false;
   }
 
+  private boolean tagPresent(String inTag) {
+    ArrayList<String> tags = currentNote.getTags();
+    for (String tag : tags) {
+      if (tag.equals(inTag)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private Color tagToColor(String tag) {
+    try {
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+      byte[] hash = digest.digest(tag.getBytes());
+
+      int r = Byte.toUnsignedInt(hash[0]);
+      int g = Byte.toUnsignedInt(hash[1]);
+      int b = Byte.toUnsignedInt(hash[2]);
+
+      return new Color(r, g, b);
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   private void refreshNoteView() {
     int len = noteList.getComponentCount();
     for (int i = 0; i < len; i++) {
       noteList.getComponent(i).setVisible(false);
     }
     noteList.removeAll();
+
+    Object selectedItem = tagBox.getSelectedItem();
+    if (selectedItem == null) {
+      selectedItem = new ColoredItem("ALL", Color.white);
+    }
+    String currentTag = ((ColoredItem) selectedItem).getText();
     ArrayList<Note> notes = currentUser.getNotes();
     if (notes.isEmpty()) {
       newNote("Untitled");
-    } else {
+    }
+    if (currentTag.equals("ALL")) {
       for (Note note : notes) {
         JButton n = new JButton();
         n.setText(note.getHeading());
@@ -86,7 +122,48 @@ public class App extends JFrame {
             });
         noteList.add(n);
       }
+    } else {
+      for (Note note : notes) {
+        ArrayList<String> noteTags = note.getTags();
+        if (noteTags.contains(currentTag)) {
+          JButton n = new JButton();
+          n.setText(note.getHeading());
+          n.addActionListener(
+              new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                  openNote(note);
+                }
+              });
+          noteList.add(n);
+        }
+      }
     }
+  }
+
+  private void refreshTagView() {
+    int len = tagView.getComponentCount();
+    for (int i = 0; i < len; i++) {
+      tagView.getComponent(i).setVisible(false);
+    }
+    tagView.removeAll();
+    ArrayList<String> tags = currentNote.getTags();
+    for (String tag : tags) {
+      JFormattedTextField l = new JFormattedTextField();
+      l.setText(tag);
+      l.setEditable(false);
+      l.setCaretColor(tagToColor(tag));
+      tagView.add(l);
+    }
+
+    // Refresh Combobox
+    tagBox.removeAllItems();
+    ArrayList<String> allTags = currentUser.getTags();
+    tagBox.addItem(new ColoredItem("ALL", Color.white));
+    for (String tag : allTags) {
+      tagBox.addItem(new ColoredItem(tag, tagToColor(tag)));
+    }
+    tagBox.setRenderer(new ColoredItemRenderer());
   }
 
   private void newNoteBtn(ActionEvent e) {
@@ -145,8 +222,82 @@ public class App extends JFrame {
   private void rename(ActionEvent e) {
     String heading = showInputDialog("Please enter the new note title");
     if (!heading.equals("null") || !heading.isBlank()) {
-      currentNote.setHeading(heading);
-      refreshNoteView();
+      if (noteExists(heading)) {
+        Gui.errorAlert(String.format("Note \"%s\" does already exist", heading));
+      } else {
+        currentNote.setHeading(heading);
+        refreshNoteView();
+      }
+    }
+  }
+
+  private void addTagBtn(ActionEvent e) {
+    String tag = showInputDialog("Please enter the name of the tag");
+    if (tag.equals("null") || tag.isBlank()) {
+      return;
+    }
+    if (tagPresent(tag)) {
+      Gui.errorAlert(String.format("Tag \"%s\" is already on the note", tag));
+    } else {
+      currentNote.addTag(tag);
+      refreshTagView();
+    }
+  }
+
+  private void delTagBtn(ActionEvent e) {
+    String tag = showInputDialog("Please enter the name of the tag you want to delete");
+    if (tag.equals("null") || tag.isBlank()) {
+      return;
+    }
+    if (!tagPresent(tag)) {
+      Gui.errorAlert(String.format("Tag \"%s\" is not present on the current note", tag));
+    } else {
+      currentNote.removeTag(tag);
+      refreshTagView();
+    }
+  }
+
+  private void tagBoxUpd(ActionEvent e) {
+    refreshTagView();
+  }
+
+  public class ColoredItem {
+    private String text;
+    private Color color;
+
+    public ColoredItem(String text, Color color) {
+      this.text = text;
+      this.color = color;
+    }
+
+    public String getText() {
+      return text;
+    }
+
+    public Color getColor() {
+      return color;
+    }
+
+    @Override
+    public String toString() {
+      return text;
+    }
+  }
+
+  static class ColoredItemRenderer extends JLabel implements ListCellRenderer<ColoredItem> {
+    @Override
+    public Component getListCellRendererComponent(
+        JList<? extends ColoredItem> list,
+        ColoredItem value,
+        int index,
+        boolean isSelected,
+        boolean cellHasFocus) {
+      if (value != null) {
+        setText(value.getText());
+        setBackground(isSelected ? list.getSelectionBackground() : value.getColor());
+        setForeground(isSelected ? list.getSelectionForeground() : Color.BLACK);
+      }
+      return this;
     }
   }
 
@@ -164,15 +315,18 @@ public class App extends JFrame {
     addTag = new JButton();
     delTag = new JButton();
     changeMode = new JButton();
-    noteName = new JLabel();
     panel2 = new JPanel();
     panel3 = new JPanel();
     searchField = new JTextField();
-    tagBox = new JComboBox();
+    tagBox = new JComboBox<ColoredItem>();
     scrollPane2 = new JScrollPane();
     noteList = new JPanel();
     scrollPane1 = new JScrollPane();
     noteEditor = new JTextArea();
+    panel4 = new JPanel();
+    noteName = new JLabel();
+    scrollPane3 = new JScrollPane();
+    tagView = new JPanel();
 
     // ======== this ========
     Container contentPane = getContentPane();
@@ -236,21 +390,18 @@ public class App extends JFrame {
 
       // ---- addTag ----
       addTag.setText("add Tag");
+      addTag.addActionListener(e -> addTagBtn(e));
       panel1.add(addTag);
 
       // ---- delTag ----
       delTag.setText("delete Tag");
+      delTag.addActionListener(e -> delTagBtn(e));
       panel1.add(delTag);
 
       // ---- changeMode ----
       changeMode.setText("Read mode");
       changeMode.addActionListener(e -> changeModeBtn(e));
       panel1.add(changeMode);
-
-      // ---- noteName ----
-      noteName.setText("noteName");
-      noteName.setHorizontalAlignment(SwingConstants.CENTER);
-      panel1.add(noteName);
     }
     contentPane.add(panel1, BorderLayout.NORTH);
 
@@ -267,6 +418,7 @@ public class App extends JFrame {
         searchField.setPreferredSize(new Dimension(80, 25));
         searchField.addPropertyChangeListener(e -> searchPropertyChange(e));
         panel3.add(searchField);
+        tagBox.addActionListener(e -> tagBoxUpd(e));
         panel3.add(tagBox);
       }
       panel2.add(panel3, BorderLayout.NORTH);
@@ -289,7 +441,29 @@ public class App extends JFrame {
       scrollPane1.setViewportView(noteEditor);
     }
     contentPane.add(scrollPane1, BorderLayout.CENTER);
-    setSize(870, 545);
+
+    // ======== panel4 ========
+    {
+      panel4.setLayout(new BorderLayout());
+
+      // ---- noteName ----
+      noteName.setText("noteName");
+      noteName.setHorizontalAlignment(SwingConstants.CENTER);
+      panel4.add(noteName, BorderLayout.NORTH);
+
+      // ======== scrollPane3 ========
+      {
+
+        // ======== tagView ========
+        {
+          tagView.setLayout(new BoxLayout(tagView, BoxLayout.Y_AXIS));
+        }
+        scrollPane3.setViewportView(tagView);
+      }
+      panel4.add(scrollPane3, BorderLayout.CENTER);
+    }
+    contentPane.add(panel4, BorderLayout.EAST);
+    setSize(825, 550);
     setLocationRelativeTo(getOwner());
     // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
   }
@@ -307,14 +481,17 @@ public class App extends JFrame {
   private JButton addTag;
   private JButton delTag;
   private JButton changeMode;
-  private JLabel noteName;
   private JPanel panel2;
   private JPanel panel3;
   private JTextField searchField;
-  private JComboBox tagBox;
+  private JComboBox<ColoredItem> tagBox;
   private JScrollPane scrollPane2;
   private JPanel noteList;
   private JScrollPane scrollPane1;
   private JTextArea noteEditor;
+  private JPanel panel4;
+  private JLabel noteName;
+  private JScrollPane scrollPane3;
+  private JPanel tagView;
   // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

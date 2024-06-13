@@ -3,6 +3,8 @@ package dev.lennis.school.notes;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class User {
 
@@ -62,6 +64,19 @@ public class User {
   public Note getNoteByHeading(String heading) {
     int id = Data.getIdByHeading(this.username, heading);
     return new Note(id);
+  }
+
+  public ArrayList<String> getTags() {
+    ArrayList<Note> notes = getNotes();
+    ArrayList<String> tags = new ArrayList<String>();
+    for (Note note : notes) {
+      ArrayList<String> noteTags = note.getTags();
+      for (String tag : noteTags) {
+        tags.add(tag);
+      }
+    }
+    Set<String> noDubs = new HashSet<>(tags);
+    return new ArrayList<>(noDubs);
   }
 
   /**
