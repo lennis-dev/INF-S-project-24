@@ -82,12 +82,7 @@ public class App extends JFrame {
     try {
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
       byte[] hash = digest.digest(tag.getBytes());
-
-      int r = Byte.toUnsignedInt(hash[0]);
-      int g = Byte.toUnsignedInt(hash[1]);
-      int b = Byte.toUnsignedInt(hash[2]);
-
-      return new Color(r, g, b);
+      return Color.getHSBColor(hash[0] / 255f, 255 / 255f, 255 / 255f);
     } catch (NoSuchAlgorithmException e) {
       throw new RuntimeException(e);
     }
