@@ -142,18 +142,11 @@ public class App extends JFrame {
   }
 
   private void refreshTagView() {
-    int len = tagView.getComponentCount();
-    for (int i = 0; i < len; i++) {
-      tagView.getComponent(i).setVisible(false);
-    }
-    tagView.removeAll();
+    tagDefList.removeAllElements();
     ArrayList<String> tags = currentNote.getTags();
     for (String tag : tags) {
-      JFormattedTextField l = new JFormattedTextField();
-      l.setText(tag);
-      l.setEditable(false);
-      l.setCaretColor(tagToColor(tag));
-      tagView.add(l);
+      ColoredItem l = new ColoredItem(tag, tagToColor(tag));
+      tagDefList.addElement(l);
     }
 
     // Refresh Combobox
@@ -257,11 +250,7 @@ public class App extends JFrame {
     }
   }
 
-  private int tmp = 0;
-
   private void tagBoxUpd(ActionEvent e) {
-
-    // System.out.println(((ColoredItem) tagBox.getSelectedItem()).getText());
     refreshNoteView();
   }
 
@@ -301,6 +290,7 @@ public class App extends JFrame {
         setBackground(isSelected ? list.getSelectionBackground() : value.getColor());
         setForeground(isSelected ? list.getSelectionForeground() : Color.BLACK);
       }
+      setOpaque(true);
       return this;
     }
   }
@@ -330,7 +320,8 @@ public class App extends JFrame {
     panel4 = new JPanel();
     noteName = new JLabel();
     scrollPane3 = new JScrollPane();
-    tagView = new JPanel();
+    tagDefList = new DefaultListModel<ColoredItem>();
+    tagView = new JList<>(tagDefList);
 
     // ======== this ========
     Container contentPane = getContentPane();
@@ -459,9 +450,7 @@ public class App extends JFrame {
       {
 
         // ======== tagView ========
-        {
-          tagView.setLayout(new BoxLayout(tagView, BoxLayout.Y_AXIS));
-        }
+        tagView.setCellRenderer(new ColoredItemRenderer());
         scrollPane3.setViewportView(tagView);
       }
       panel4.add(scrollPane3, BorderLayout.CENTER);
@@ -496,6 +485,7 @@ public class App extends JFrame {
   private JPanel panel4;
   private JLabel noteName;
   private JScrollPane scrollPane3;
-  private JPanel tagView;
+  private DefaultListModel<ColoredItem> tagDefList;
+  private JList tagView;
   // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }
