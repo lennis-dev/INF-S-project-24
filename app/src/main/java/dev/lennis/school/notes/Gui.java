@@ -3,14 +3,11 @@ package dev.lennis.school.notes;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 import dev.lennis.school.notes.gui.App;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Gui {
-  public static final Color backgroundColor = new Color(0x2F3136);
-
   public static void main() {
     new App();
   }
