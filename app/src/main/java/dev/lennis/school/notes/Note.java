@@ -8,6 +8,30 @@ public class Note {
   private String heading;
   private String text;
   private ArrayList<String> tags;
+  private boolean permission = true;
+  private ArrayList<String> readAccess;
+  private ArrayList<String> writeAccess;
+
+  public static ArrayList<Note> getSharedNotes(String username) {
+    ArrayList<Note> notes = new ArrayList<Note>();
+    for (ArrayList<String> note : Data.getSharedNotesByUsername(username)) {
+      Note noteTmp = new Note(Integer.valueOf(note.get(0)));
+      if (note.get(1).equals("1")) {
+        noteTmp.setPermission(true);
+      } else {
+        noteTmp.setPermission(false);
+      }
+    }
+    return notes;
+  }
+
+  public static ArrayList<Note> getNotesBySearch(String username, String search) {
+    ArrayList<Note> notes = new ArrayList<Note>();
+    for (int note : Data.getNotesBySearch(username, search)) {
+      notes.add(new Note(note));
+    }
+    return notes;
+  }
 
   public static ArrayList<Note> getNotes() {
     ArrayList<Note> notes = new ArrayList<Note>();
@@ -45,10 +69,50 @@ public class Note {
     this.heading = note.get(2);
     this.text = note.get(3);
     this.tags = Data.getTagsByNoteId(id);
+    this.readAccess = Data.getReadAccessByNoteId(id);
+    this.writeAccess = Data.getWriteAccessByNoteId(id);
   }
 
   public int getId() {
     return id;
+  }
+
+  public void addShare(String username, boolean mode) {
+    if (mode) {
+      readAccess.add(username);
+    } else {
+      writeAccess.add(username);
+    }
+    Data.addPermission(this.id, username, mode);
+  }
+
+  public void removeShare(String username, boolean mode) {
+    if (mode) {
+      readAccess.remove(username);
+    } else {
+      writeAccess.remove(username);
+    }
+    Data.removePermission(this.id, username, mode);
+  }
+
+  public ArrayList<String> getReadAccess() {
+    return readAccess;
+  }
+
+  public ArrayList<String> getWriteAccess() {
+    return writeAccess;
+  }
+
+  public void addReadAccess(String username) {
+    if (readAccess.contains(username)) return;
+    readAccess.add(username);
+    Data.addPermission(this.id, username, false);
+  }
+
+  public void addWriteAccess(String username) {
+    if (writeAccess.contains(username)) return;
+    writeAccess.add(username);
+    Data.addPermission(this.id, username, true);
   }
 
   public String getUsername() {
@@ -65,6 +129,14 @@ public class Note {
 
   public ArrayList<String> getTags() {
     return tags;
+  }
+
+  public boolean getPermission() {
+    return permission;
+  }
+
+  public void setPermission(Boolean permission) {
+    this.permission = permission;
   }
 
   public void setHeading(String heading) {
