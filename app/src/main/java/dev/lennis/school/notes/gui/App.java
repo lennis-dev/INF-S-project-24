@@ -257,8 +257,12 @@ public class App extends JFrame {
     }
   }
 
+  private int tmp = 0;
+
   private void tagBoxUpd(ActionEvent e) {
-    refreshTagView();
+
+    // System.out.println(((ColoredItem) tagBox.getSelectedItem()).getText());
+    refreshNoteView();
   }
 
   public class ColoredItem {
