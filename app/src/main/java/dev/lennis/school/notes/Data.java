@@ -17,6 +17,19 @@ public class Data {
     return result;
   }
 
+  public static ArrayList<String> getTagsByUsername(String username) {
+    ArrayList<String> tags = new ArrayList<String>();
+    for (ArrayList<String> tag :
+        Database.execute(
+            "SELECT DISTINCT tag FROM tags WHERE noteID IN (SELECT id FROM notes WHERE username ="
+                + " ?)",
+            new String[] {username},
+            false)) {
+      tags.add(tag.get(0));
+    }
+    return tags;
+  }
+
   public static ArrayList<ArrayList<String>> getNotes() {
     return Database.execute("SELECT * FROM notes", new String[0], false);
   }
