@@ -108,6 +108,11 @@ public class App extends JFrame {
       for (Note note : notes) {
         JButton n = new JButton();
         n.setText(note.getHeading());
+        Dimension prefSize = panel3.getPreferredSize();
+        prefSize.width = ((int) prefSize.getWidth()) + 50;
+        n.setPreferredSize(prefSize);
+        n.setMaximumSize(prefSize);
+        n.setMinimumSize(prefSize);
         n.addActionListener(
             new ActionListener() {
               @Override
@@ -123,6 +128,11 @@ public class App extends JFrame {
         if (noteTags.contains(currentTag)) {
           JButton n = new JButton();
           n.setText(note.getHeading());
+          Dimension prefSize = panel3.getPreferredSize();
+          prefSize.width = ((int) prefSize.getWidth()) + 50;
+          n.setPreferredSize(prefSize);
+          n.setMaximumSize(prefSize);
+          n.setMinimumSize(prefSize);
           n.addActionListener(
               new ActionListener() {
                 @Override
