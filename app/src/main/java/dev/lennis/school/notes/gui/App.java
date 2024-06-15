@@ -108,6 +108,10 @@ public class App extends JFrame {
       for (Note note : notes) {
         JButton n = new JButton();
         n.setText(note.getHeading());
+        Dimension prefSize = new Dimension(248, 50);
+        n.setPreferredSize(prefSize);
+        n.setMaximumSize(prefSize);
+        n.setMinimumSize(prefSize);
         n.addActionListener(
             new ActionListener() {
               @Override
@@ -123,6 +127,10 @@ public class App extends JFrame {
         if (noteTags.contains(currentTag)) {
           JButton n = new JButton();
           n.setText(note.getHeading());
+          Dimension prefSize = new Dimension(248, 50);
+          n.setPreferredSize(prefSize);
+          n.setMaximumSize(prefSize);
+          n.setMinimumSize(prefSize);
           n.addActionListener(
               new ActionListener() {
                 @Override
@@ -388,17 +396,20 @@ public class App extends JFrame {
     // ======== panel2 ========
     {
       panel2.setLayout(new BorderLayout());
+      panel2.setPreferredSize(new Dimension(250, 40));
 
       // ======== panel3 ========
       {
         panel3.setLayout(new BoxLayout(panel3, BoxLayout.X_AXIS));
 
         // ---- searchField ----
-        searchField.setMinimumSize(new Dimension(100, 25));
-        searchField.setPreferredSize(new Dimension(80, 25));
+        searchField.setMinimumSize(new Dimension(125, 50));
+        searchField.setPreferredSize(new Dimension(125, 50));
         searchField.addPropertyChangeListener(e -> searchPropertyChange(e));
         panel3.add(searchField);
         tagBox.addActionListener(e -> tagBoxUpd(e));
+        tagBox.setMinimumSize(new Dimension(125, 50));
+        tagBox.setPreferredSize(new Dimension(125, 50));
         panel3.add(tagBox);
       }
       panel2.add(panel3, BorderLayout.NORTH);
@@ -425,6 +436,7 @@ public class App extends JFrame {
     // ======== panel4 ========
     {
       panel4.setLayout(new BorderLayout());
+      panel4.setPreferredSize(new Dimension(250, 1000));
 
       // ---- noteName ----
       noteName.setText("noteName");
