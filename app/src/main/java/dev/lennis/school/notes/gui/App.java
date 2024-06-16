@@ -22,6 +22,7 @@ import javax.swing.*;
  */
 public class App extends JFrame {
   public App() {
+    setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     setName("Mint-Blow");
     setTitle("Mint-Blow");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

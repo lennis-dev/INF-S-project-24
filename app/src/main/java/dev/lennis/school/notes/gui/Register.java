@@ -44,7 +44,6 @@ public class Register extends JDialog {
     password = new JPasswordField();
 
     // ======== this ========
-    setVisible(true);
     Container contentPane = getContentPane();
     contentPane.setLayout(null);
 
@@ -116,7 +115,8 @@ public class Register extends JDialog {
     }
     setSize(225, 385);
     setLocationRelativeTo(getOwner());
-    setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+    setUndecorated(true);
     setVisible(true);
     // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
   }
