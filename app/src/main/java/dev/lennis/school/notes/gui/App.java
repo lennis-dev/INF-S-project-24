@@ -22,6 +22,8 @@ import javax.swing.*;
  */
 public class App extends JFrame {
   public App() {
+    setName("Mint-Blow");
+    setTitle("Mint-Blow");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setSize(1000, 600);
     setVisible(true);
