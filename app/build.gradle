@@ -32,3 +32,9 @@ application {
     // Define the main class for the application.
     mainClass = 'dev.lennis.school.notes.Main'
 }
+
+jar {
+  manifest {
+    attributes 'Main-Class': application.mainClass
+  }
+}
