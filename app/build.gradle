@@ -34,7 +34,7 @@ application {
 }
 
 jar {
-  manifest {
-    attributes 'Main-Class': application.mainClass
-  }
+    manifest {
+        attributes 'Main-Class': application.mainClass
+    }
 }
