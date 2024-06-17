@@ -16,8 +16,8 @@ public class Login extends JDialog {
 
   private void submit(ActionEvent e) {
     if (Gui.checkLogin(formattedTextField1.getText(), passwordField1.getPassword())) {
-      ownerObj.login(formattedTextField1.getText());
       dispose();
+      ownerObj.login(formattedTextField1.getText());
     } else {
       formattedTextField1.setText("");
       passwordField1.setText("");
@@ -44,10 +44,6 @@ public class Login extends JDialog {
 
     // ---- label1 ----
     label1.setText("Login");
-    label1.setFont(
-        label1
-            .getFont()
-            .deriveFont(label1.getFont().getStyle() | Font.BOLD, label1.getFont().getSize() + 12f));
     contentPane.add(label1);
     label1.setBounds(new Rectangle(new Point(80, 30), label1.getPreferredSize()));
 
