@@ -44,6 +44,10 @@ public class Login extends JDialog {
 
     // ---- label1 ----
     label1.setText("Login");
+    label1.setFont(
+        label1
+            .getFont()
+            .deriveFont(label1.getFont().getStyle() | Font.BOLD, label1.getFont().getSize() + 12f));
     contentPane.add(label1);
     label1.setBounds(new Rectangle(new Point(80, 30), label1.getPreferredSize()));
 
