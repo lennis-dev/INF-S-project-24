@@ -41,9 +41,9 @@ public class App extends JFrame {
 
     displayName.setText(currentUser.getDisplayName());
 
-    ArrayList<Note> notes = currentUser.getNotes();
     refreshNoteView();
 
+    ArrayList<Note> notes = currentUser.getNotes();
     openNote(notes.getFirst());
     refreshTagView();
   }
