@@ -2,6 +2,9 @@
 
 A simple note taking app with multi user support that allows you to take notes and save them in a SQLite database.
 
+> [!CAUTION]
+> This is a school project and not intended for productive use.
+
 ## Features
 - Users
   - Register
