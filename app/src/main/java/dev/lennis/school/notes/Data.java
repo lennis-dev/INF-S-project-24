@@ -17,6 +17,19 @@ public class Data {
     return result;
   }
 
+  public static ArrayList<String> getTagsByUsername(String username) {
+    ArrayList<String> tags = new ArrayList<String>();
+    for (ArrayList<String> tag :
+        Database.execute(
+            "SELECT DISTINCT tag FROM tags WHERE noteID IN (SELECT id FROM notes WHERE username ="
+                + " ?)",
+            new String[] {username},
+            false)) {
+      tags.add(tag.get(0));
+    }
+    return tags;
+  }
+
   public static ArrayList<ArrayList<String>> getNotes() {
     return Database.execute("SELECT * FROM notes", new String[0], false);
   }
@@ -27,6 +40,16 @@ public class Data {
             new String[] {Integer.toString(id)},
             false)
         .get(0);
+  }
+
+  public static int getIdByHeading(String username, String heading) {
+    return Integer.parseInt(
+        Database.execute(
+                "SELECT id, username, heading, text FROM notes WHERE username = ? AND heading = ?",
+                new String[] {username, heading},
+                false)
+            .get(0)
+            .get(0));
   }
 
   public static int addNote(String username, String heading, String text) {

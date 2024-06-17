@@ -29,6 +29,17 @@ public class User {
     Data.deleteUserByUsername(username);
   }
 
+  public static boolean userExists(String username) {
+    ArrayList<ArrayList<String>> users = Data.getUsers();
+    for (ArrayList<String> userAll : users) {
+      String user = userAll.getFirst();
+      if (user.equals(username)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public User(String username, String displayName, String passwordSalt, String passwordHash) {
     this.username = username;
     this.displayName = displayName;
@@ -46,6 +57,15 @@ public class User {
 
   public ArrayList<Note> getNotes() {
     return Note.getNotesByUsername(username);
+  }
+
+  public Note getNoteByHeading(String heading) {
+    int id = Data.getIdByHeading(this.username, heading);
+    return new Note(id);
+  }
+
+  public ArrayList<String> getTags() {
+    return Data.getTagsByUsername(username);
   }
 
   /**

@@ -3,7 +3,6 @@ package dev.lennis.school.notes;
 import java.io.File;
 
 public class Main {
-
   static File lockFile = new File("notes.lock");
 
   public static void main(String[] args) {
@@ -21,7 +20,7 @@ public class Main {
     }
 
     // Launch the GUI
-
+    Gui.main();
   }
 
   static {
