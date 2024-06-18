@@ -225,6 +225,7 @@ public class App extends JFrame {
         Gui.errorAlert(String.format("Note \"%s\" does already exist", heading));
       } else {
         currentNote.setHeading(heading);
+        noteName.setText(currentNote.getHeading());
         refreshNoteView();
       }
     }
