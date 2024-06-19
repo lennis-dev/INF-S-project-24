@@ -7,11 +7,12 @@ import dev.lennis.school.notes.Note;
 import dev.lennis.school.notes.User;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /*
  * Created by JFormDesigner on Sun Jun 09 10:40:42 CEST 2024
@@ -92,6 +93,10 @@ public class App extends JFrame {
   }
 
   private void refreshNoteView() {
+    refreshNoteView(currentUser.getNotes());
+  }
+
+  private void refreshNoteView(ArrayList<Note> notes) {
     int len = noteList.getComponentCount();
     for (int i = 0; i < len; i++) {
       noteList.getComponent(i).setVisible(false);
@@ -103,7 +108,6 @@ public class App extends JFrame {
       selectedItem = new ColoredItem("ALL", Color.white);
     }
     String currentTag = ((ColoredItem) selectedItem).getText();
-    ArrayList<Note> notes = currentUser.getNotes();
     if (notes.isEmpty()) {
       newNote("Untitled");
     }
@@ -214,8 +218,9 @@ public class App extends JFrame {
     // TODO add your code here
   }
 
-  private void searchPropertyChange(PropertyChangeEvent e) {
-    // TODO add your code here
+  private void searchUpdate() {
+    ArrayList<Note> notes = Note.getNotesBySearch(currentUser.getUsername(), searchField.getText());
+    refreshNoteView(notes);
   }
 
   private void rename(ActionEvent e) {
@@ -409,7 +414,22 @@ public class App extends JFrame {
         // ---- searchField ----
         searchField.setMinimumSize(new Dimension(125, 50));
         searchField.setPreferredSize(new Dimension(125, 50));
-        searchField.addPropertyChangeListener(e -> searchPropertyChange(e));
+        searchField
+            .getDocument()
+            .addDocumentListener(
+                new DocumentListener() {
+                  public void changedUpdate(DocumentEvent e) {
+                    searchUpdate();
+                  }
+
+                  public void removeUpdate(DocumentEvent e) {
+                    searchUpdate();
+                  }
+
+                  public void insertUpdate(DocumentEvent e) {
+                    searchUpdate();
+                  }
+                });
         panel3.add(searchField);
         tagBox.addActionListener(e -> tagBoxUpd(e));
         tagBox.setMinimumSize(new Dimension(125, 50));
@@ -487,6 +507,6 @@ public class App extends JFrame {
   private JLabel noteName;
   private JScrollPane scrollPane3;
   private DefaultListModel<ColoredItem> tagDefList;
-  private JList tagView;
+  private JList<ColoredItem> tagView;
   // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }
