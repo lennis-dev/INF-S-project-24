@@ -29,6 +29,10 @@ public class App extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setSize(1000, 600);
     setVisible(true);
+
+    ImageIcon img = new ImageIcon("./../../../../../../resources/assets/svg/icon.svg");
+    setIconImage(img.getImage());
+
     new Login(this, this);
   }
 
