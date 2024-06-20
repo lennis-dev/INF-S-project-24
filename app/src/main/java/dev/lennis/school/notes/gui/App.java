@@ -22,6 +22,14 @@ import javax.swing.event.DocumentListener;
  * @author ben
  */
 public class App extends JFrame {
+  private ImageIcon img =
+      new ImageIcon(
+          Toolkit.getDefaultToolkit().getImage(getClass().getResource("/assets/png/icon.png")));
+
+  public Image getImg() {
+    return img.getImage();
+  }
+
   public App() {
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     setName("Mint-Blow");
@@ -30,10 +38,7 @@ public class App extends JFrame {
     setSize(1000, 600);
     setVisible(true);
 
-    ImageIcon img =
-        new ImageIcon(
-            Toolkit.getDefaultToolkit().getImage(getClass().getResource("/assets/png/icon.png")));
-    setIconImage(img.getImage());
+    setIconImage(getImg());
 
     new Login(this, this);
   }

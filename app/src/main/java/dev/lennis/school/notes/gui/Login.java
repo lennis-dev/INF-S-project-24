@@ -42,6 +42,12 @@ public class Login extends JDialog {
     Container contentPane = getContentPane();
     contentPane.setLayout(null);
 
+    // ---- icon ----
+    Image icon = ownerObj.getImg();
+    JLabel iconEl = new JLabel(new ImageIcon(icon));
+    iconEl.setBounds(0, 0, 60, 60);
+    contentPane.add(iconEl);
+
     // ---- label1 ----
     label1.setText("Login");
     label1.setFont(
