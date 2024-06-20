@@ -40,11 +40,10 @@ public class App extends JFrame {
     setIconImage(getImg());
 
     new Login(this, this);
-    // new Settings(this, this);
   }
 
   private Note currentNote;
-  private User currentUser;
+  protected User currentUser;
 
   protected void login(String usr) {
     initComponents();
@@ -287,6 +286,17 @@ public class App extends JFrame {
     }
   }
 
+  private Settings settings;
+
+  private void settings(ActionEvent e) {
+    if (settings == null) {
+      settings = new Settings(this, this);
+    } else {
+      settings.dispose();
+      settings = null;
+    }
+  }
+
   private void tagBoxUpd(ActionEvent e) {
     refreshNoteView();
   }
@@ -376,6 +386,7 @@ public class App extends JFrame {
 
       // ---- displayName ----
       displayName.setText("DisplayName");
+      displayName.addActionListener(e -> settings(e));
       panel1.add(displayName);
 
       // ---- newNote ----
@@ -505,7 +516,7 @@ public class App extends JFrame {
   }
 
   private JPanel panel1;
-  private JButton displayName;
+  protected JButton displayName;
   private JButton newNote;
   private JButton openNote;
   private JButton deleteNote;
