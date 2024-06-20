@@ -30,7 +30,9 @@ public class App extends JFrame {
     setSize(1000, 600);
     setVisible(true);
 
-    ImageIcon img = new ImageIcon("./../../../../../../resources/assets/svg/icon.svg");
+    ImageIcon img =
+        new ImageIcon(
+            Toolkit.getDefaultToolkit().getImage(getClass().getResource("/assets/png/icon.png")));
     setIconImage(img.getImage());
 
     new Login(this, this);
