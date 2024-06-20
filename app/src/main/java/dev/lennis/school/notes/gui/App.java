@@ -130,7 +130,7 @@ public class App extends JFrame {
       for (Note note : notes) {
         JButton n = new JButton();
         n.setText(note.getHeading());
-        Dimension prefSize = new Dimension(248, 50);
+        Dimension prefSize = new Dimension(244, 50);
         n.setPreferredSize(prefSize);
         n.setMaximumSize(prefSize);
         n.setMinimumSize(prefSize);
