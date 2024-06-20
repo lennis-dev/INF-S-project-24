@@ -9,6 +9,9 @@ import java.util.regex.Pattern;
 
 public class Gui {
   public static void main() {
+    // Workaround so theme gets applied
+    App appTmp = new App();
+    appTmp.dispose();
     new App();
   }
 
