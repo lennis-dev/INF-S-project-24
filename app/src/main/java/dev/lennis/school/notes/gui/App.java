@@ -27,7 +27,7 @@ public class App extends JFrame {
     try {
       UIManager.setLookAndFeel("com.formdev.flatlaf.themes.FlatMacDarkLaf");
     } catch (Exception ex) {
-      
+
     }
     JFrame.setDefaultLookAndFeelDecorated(true);
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
@@ -40,7 +40,7 @@ public class App extends JFrame {
     setIconImage(getImg());
 
     new Login(this, this);
-    new Settings(this, this);
+    // new Settings(this, this);
   }
 
   private Note currentNote;
