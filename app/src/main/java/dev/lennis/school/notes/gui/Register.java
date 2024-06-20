@@ -32,9 +32,6 @@ public class Register extends JDialog {
   }
 
   private void initComponents() {
-    // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-    // @formatter:off
-    // Generated using JFormDesigner Evaluation license - Wu Ling
     label1 = new JLabel();
     username = new JFormattedTextField();
     conPassword = new JPasswordField();
@@ -124,11 +121,8 @@ public class Register extends JDialog {
     setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
     setUndecorated(true);
     setVisible(true);
-    // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
   }
 
-  // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-  // Generated using JFormDesigner Evaluation license - Wu Ling
   private JLabel label1;
   private JFormattedTextField username;
   private JPasswordField conPassword;
@@ -136,5 +130,4 @@ public class Register extends JDialog {
   private JButton button2;
   private JFormattedTextField disName;
   private JPasswordField password;
-  // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

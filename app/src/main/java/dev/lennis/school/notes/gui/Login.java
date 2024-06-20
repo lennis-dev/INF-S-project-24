@@ -30,8 +30,6 @@ public class Login extends JDialog {
   }
 
   private void initComponents() {
-    // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-    // Generated using JFormDesigner Evaluation license - Wu Ling
     label1 = new JLabel();
     formattedTextField1 = new JFormattedTextField();
     passwordField1 = new JPasswordField();
@@ -103,15 +101,11 @@ public class Login extends JDialog {
     setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
     setUndecorated(true);
     setVisible(true);
-    // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
   }
 
-  // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-  // Generated using JFormDesigner Evaluation license - Wu Ling
   private JLabel label1;
   private JFormattedTextField formattedTextField1;
   private JPasswordField passwordField1;
   private JButton button1;
   private JButton button2;
-  // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

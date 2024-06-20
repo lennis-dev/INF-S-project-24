@@ -14,13 +14,6 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-/*
- * Created by JFormDesigner on Sun Jun 09 10:40:42 CEST 2024
- */
-
-/**
- * @author ben
- */
 public class App extends JFrame {
   private ImageIcon img =
       new ImageIcon(
@@ -47,6 +40,7 @@ public class App extends JFrame {
     setIconImage(getImg());
 
     new Login(this, this);
+    new Settings(this, this);
   }
 
   private Note currentNote;
@@ -339,8 +333,6 @@ public class App extends JFrame {
   }
 
   private void initComponents() {
-    // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-    // Generated using JFormDesigner Evaluation license - Wu Ling
     panel1 = new JPanel();
     displayName = new JButton();
     newNote = new JButton();
@@ -510,11 +502,8 @@ public class App extends JFrame {
     contentPane.add(panel4, BorderLayout.EAST);
     setSize(825, 550);
     setLocationRelativeTo(getOwner());
-    // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
   }
 
-  // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-  // Generated using JFormDesigner Evaluation license - Wu Ling
   private JPanel panel1;
   private JButton displayName;
   private JButton newNote;
@@ -539,5 +528,4 @@ public class App extends JFrame {
   private JScrollPane scrollPane3;
   private DefaultListModel<ColoredItem> tagDefList;
   private JList<ColoredItem> tagView;
-  // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

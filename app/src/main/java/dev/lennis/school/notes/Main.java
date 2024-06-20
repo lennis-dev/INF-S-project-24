@@ -19,10 +19,7 @@ public class Main {
       System.exit(1);
     }
 
-    try {
-      Gui.main();
-    } catch (Exception e) {
-    }
+    Gui.main();
   }
 
   static {
