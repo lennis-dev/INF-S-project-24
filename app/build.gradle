@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-  implementation 'com.miglayout:miglayout-swing:11.3'
+  implementation 'org.commonmark:commonmark:0.22.0'
   implementation 'org.xerial:sqlite-jdbc:3.46.0.0'
   implementation 'com.formdev:flatlaf-intellij-themes:3.4.1'
 }

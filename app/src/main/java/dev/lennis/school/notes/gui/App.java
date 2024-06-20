@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 
 public class App extends JFrame {
   private ImageIcon img =
@@ -205,7 +208,8 @@ public class App extends JFrame {
   }
 
   private void saveBtn(ActionEvent e) {
-    currentNote.setText(noteEditor.getText());
+    if (noteEditor.isEditable()) currentNote.setText(noteEditor.getText());
+    else currentNote.setText(tempNoteContent);
   }
 
   private void deleteBtn(ActionEvent e) {
@@ -229,7 +233,21 @@ public class App extends JFrame {
   }
 
   private void changeModeBtn(ActionEvent e) {
-    // TODO add your code here
+    if (noteEditor.isEditable()) {
+      tempNoteContent = noteEditor.getText();
+      noteEditor.setEditable(false);
+      changeMode.setText("Edit mode");
+      noteEditor.setContentType("text/html");
+      Parser parser = Parser.builder().build();
+      Node document = parser.parse(tempNoteContent);
+      HtmlRenderer renderer = HtmlRenderer.builder().build();
+      noteEditor.setText(renderer.render(document));
+    } else {
+      noteEditor.setEditable(true);
+      changeMode.setText("Read mode");
+      noteEditor.setContentType("text/plain");
+      noteEditor.setText(tempNoteContent);
+    }
   }
 
   private void searchUpdate() {
@@ -361,7 +379,7 @@ public class App extends JFrame {
     scrollPane2 = new JScrollPane();
     noteList = new JPanel();
     scrollPane1 = new JScrollPane();
-    noteEditor = new JTextArea();
+    noteEditor = new JEditorPane();
     panel4 = new JPanel();
     noteName = new JLabel();
     scrollPane3 = new JScrollPane();
@@ -533,10 +551,11 @@ public class App extends JFrame {
   private JScrollPane scrollPane2;
   private JPanel noteList;
   private JScrollPane scrollPane1;
-  private JTextArea noteEditor;
+  private JEditorPane noteEditor;
   private JPanel panel4;
   private JLabel noteName;
   private JScrollPane scrollPane3;
   private DefaultListModel<ColoredItem> tagDefList;
   private JList<ColoredItem> tagView;
+  private String tempNoteContent;
 }
