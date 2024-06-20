@@ -70,8 +70,9 @@ public class App extends JFrame {
   private void openNote(Note note) {
     currentNote = note;
     noteName.setText(note.getHeading());
-    String noteContents = note.getText();
-    noteEditor.setText(noteContents);
+    noteEditor.setEditable(true);
+    noteEditor.setContentType("text/plain");
+    noteEditor.setText(note.getText());
     refreshTagView();
   }
 
@@ -195,15 +196,6 @@ public class App extends JFrame {
       Gui.errorAlert(String.format("Note \"%s\" does already exist", name));
     } else {
       newNote(name);
-    }
-  }
-
-  private void openNoteBtn(ActionEvent e) {
-    String heading = showInputDialog("Please enter the name of the note you want to open");
-    if (noteExists(heading)) {
-      openNote(currentUser.getNoteByHeading(heading));
-    } else {
-      Gui.errorAlert(String.format("Note \"%s\" does not exist", heading));
     }
   }
 
@@ -364,7 +356,6 @@ public class App extends JFrame {
     panel1 = new JPanel();
     displayName = new JButton();
     newNote = new JButton();
-    openNote = new JButton();
     deleteNote = new JButton();
     shareNote = new JButton();
     save = new JButton();
@@ -411,11 +402,6 @@ public class App extends JFrame {
       newNote.setText("new");
       newNote.addActionListener(e -> newNoteBtn(e));
       panel1.add(newNote);
-
-      // ---- openNote ----
-      openNote.setText("open");
-      openNote.addActionListener(e -> openNoteBtn(e));
-      panel1.add(openNote);
 
       // ---- deleteNote ----
       deleteNote.setText("delete");
@@ -536,7 +522,6 @@ public class App extends JFrame {
   private JPanel panel1;
   protected JButton displayName;
   private JButton newNote;
-  private JButton openNote;
   private JButton deleteNote;
   private JButton shareNote;
   private JButton save;
