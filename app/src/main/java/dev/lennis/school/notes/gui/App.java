@@ -99,7 +99,11 @@ public class App extends JFrame {
   }
 
   private void refreshNoteView() {
-    refreshNoteView(currentUser.getNotes());
+    ArrayList<Note> notes = currentUser.getNotes();
+    if (notes.isEmpty()) {
+      newNote("Untitled");
+    }
+    refreshNoteView(notes);
   }
 
   private void refreshNoteView(ArrayList<Note> notes) {
@@ -114,9 +118,6 @@ public class App extends JFrame {
       selectedItem = new ColoredItem("ALL", Color.white);
     }
     String currentTag = ((ColoredItem) selectedItem).getText();
-    if (notes.isEmpty()) {
-      newNote("Untitled");
-    }
     if (currentTag.equals("ALL")) {
       for (Note note : notes) {
         JButton n = new JButton();
