@@ -31,6 +31,12 @@ public class App extends JFrame {
   }
 
   public App() {
+    try {
+      UIManager.setLookAndFeel("com.formdev.flatlaf.themes.FlatMacDarkLaf");
+    } catch (Exception ex) {
+      
+    }
+    JFrame.setDefaultLookAndFeelDecorated(true);
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     setName("Mint-Blow");
     setTitle("Mint-Blow");
