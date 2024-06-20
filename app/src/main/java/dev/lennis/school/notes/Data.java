@@ -75,6 +75,10 @@ public class Data {
 
   public static void deleteNoteById(int id) {
     Database.execute("DELETE FROM notes WHERE id = ?", new String[] {Integer.toString(id)}, true);
+    Database.execute(
+        "DELETE FROM tags WHERE noteID = ?", new String[] {Integer.toString(id)}, true);
+    Database.execute(
+        "DELETE FROM permissions WHERE noteID = ?", new String[] {Integer.toString(id)}, true);
   }
 
   public static ArrayList<String> getTagsByNoteId(int noteId) {
@@ -216,5 +220,9 @@ public class Data {
       writeAccess.add(user.get(0));
     }
     return writeAccess;
+  }
+
+  public static void deleteAllPermissionsByUser(String username) {
+    Database.execute("DELETE FROM permissions WHERE username = ?", new String[] {username}, true);
   }
 }

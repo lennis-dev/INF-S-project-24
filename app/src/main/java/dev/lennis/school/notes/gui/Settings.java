@@ -4,7 +4,6 @@ import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showInputDialog;
 
 import dev.lennis.school.notes.Gui;
-import dev.lennis.school.notes.User;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -98,8 +97,8 @@ public class Settings extends JDialog {
         showConfirmDialog(
             getParent(), "Do you really want to delete your accout?\nThis can't be reversed!");
     if (check == 0) {
+      ownerObj.currentUser.delete();
       logout();
-      User.deleteUserByUsername(ownerObj.currentUser.getUsername());
     }
   }
 

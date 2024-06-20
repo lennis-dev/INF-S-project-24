@@ -25,10 +25,6 @@ public class User {
     Data.addUser(username, displayName, salt, hash);
   }
 
-  public static void deleteUserByUsername(String username) {
-    Data.deleteUserByUsername(username);
-  }
-
   public static boolean userExists(String username) {
     ArrayList<ArrayList<String>> users = Data.getUsers();
     for (ArrayList<String> userAll : users) {
@@ -146,5 +142,11 @@ public class User {
   public void setDisplayName(String displayName) {
     this.displayName = displayName;
     Data.updateUserDisplayName(username, displayName);
+  }
+
+  public void delete() {
+    getNotes().forEach(Note::delete);
+    Data.deleteAllPermissionsByUser(username);
+    Data.deleteUserByUsername(username);
   }
 }
