@@ -183,7 +183,10 @@ public class App extends JFrame {
 
   private void newNoteBtn(ActionEvent e) {
     String name = showInputDialog("Please enther the heading of the note");
-    if (name.equals("null")) {
+    if (name == null) {
+      return;
+    }
+    if (name.isBlank()) {
       return;
     }
     if (noteExists(name)) {
@@ -237,20 +240,27 @@ public class App extends JFrame {
 
   private void rename(ActionEvent e) {
     String heading = showInputDialog("Please enter the new note title");
-    if (!heading.equals("null") || !heading.isBlank()) {
-      if (noteExists(heading)) {
-        Gui.errorAlert(String.format("Note \"%s\" does already exist", heading));
-      } else {
-        currentNote.setHeading(heading);
-        noteName.setText(currentNote.getHeading());
-        refreshNoteView();
-      }
+    if (heading == null) {
+      return;
+    }
+    if (heading.isBlank()) {
+      return;
+    }
+    if (noteExists(heading)) {
+      Gui.errorAlert(String.format("Note \"%s\" does already exist", heading));
+    } else {
+      currentNote.setHeading(heading);
+      noteName.setText(currentNote.getHeading());
+      refreshNoteView();
     }
   }
 
   private void addTagBtn(ActionEvent e) {
     String tag = showInputDialog("Please enter the name of the tag");
-    if (tag.equals("null") || tag.isBlank()) {
+    if (tag == null) {
+      return;
+    }
+    if (tag.isBlank()) {
       return;
     }
     if (tagPresent(tag)) {
@@ -263,7 +273,10 @@ public class App extends JFrame {
 
   private void delTagBtn(ActionEvent e) {
     String tag = showInputDialog("Please enter the name of the tag you want to delete");
-    if (tag.equals("null") || tag.isBlank()) {
+    if (tag == null) {
+      return;
+    }
+    if (tag.isBlank()) {
       return;
     }
     if (!tagPresent(tag)) {

@@ -19,8 +19,10 @@ public class Main {
       System.exit(1);
     }
 
-    // Launch the GUI
-    Gui.main();
+    try {
+      Gui.main();
+    } catch (Exception e) {
+    }
   }
 
   static {
