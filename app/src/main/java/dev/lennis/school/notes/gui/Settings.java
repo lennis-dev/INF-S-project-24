@@ -80,8 +80,7 @@ public class Settings extends JDialog {
         return;
       }
     }
-    // TODO make password actually change
-    // ownerObj.currentUser.setPasswordHash(User.);
+    ownerObj.currentUser.setPasswordHash(psswd);
   }
 
   private void logout(ActionEvent e) {
