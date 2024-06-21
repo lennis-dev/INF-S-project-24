@@ -106,28 +106,14 @@ public class Settings extends JDialog {
     label1 = new JLabel();
     panel1 = new JPanel();
     panel2 = new JPanel();
-    hSpacer1 = new JPanel(null);
     rename = new JButton();
-    hSpacer2 = new JPanel(null);
-    vSpacer1 = new JPanel(null);
     panel3 = new JPanel();
-    hSpacer3 = new JPanel(null);
     changePassword = new JButton();
-    hSpacer4 = new JPanel(null);
-    vSpacer2 = new JPanel(null);
     panel4 = new JPanel();
-    hSpacer5 = new JPanel(null);
-    vSpacer3 = new JPanel(null);
     panel5 = new JPanel();
-    hSpacer7 = new JPanel(null);
     logout = new JButton();
-    hSpacer8 = new JPanel(null);
-    vSpacer4 = new JPanel(null);
     panel6 = new JPanel();
-    hSpacer9 = new JPanel(null);
     deleteAcc = new JButton();
-    hSpacer10 = new JPanel(null);
-    vSpacer5 = new JPanel(null);
 
     // ======== this ========
     Container contentPane = getContentPane();
@@ -156,7 +142,6 @@ public class Settings extends JDialog {
       // ======== panel2 ========
       {
         panel2.setLayout(new BoxLayout(panel2, BoxLayout.X_AXIS));
-        panel2.add(hSpacer1);
 
         // ---- rename ----
         rename.setText("Change Display Name");
@@ -165,15 +150,12 @@ public class Settings extends JDialog {
         rename.setPreferredSize(new Dimension(200, 25));
         rename.addActionListener(e -> rename(e));
         panel2.add(rename);
-        panel2.add(hSpacer2);
       }
       panel1.add(panel2);
-      panel1.add(vSpacer1);
 
       // ======== panel3 ========
       {
         panel3.setLayout(new BoxLayout(panel3, BoxLayout.X_AXIS));
-        panel3.add(hSpacer3);
 
         // ---- changePassword ----
         changePassword.setText("Change Password");
@@ -182,23 +164,18 @@ public class Settings extends JDialog {
         changePassword.setPreferredSize(new Dimension(200, 25));
         changePassword.addActionListener(e -> changePassword(e));
         panel3.add(changePassword);
-        panel3.add(hSpacer4);
       }
       panel1.add(panel3);
-      panel1.add(vSpacer2);
 
       // ======== panel4 ========
       {
         panel4.setLayout(new BoxLayout(panel4, BoxLayout.X_AXIS));
-        panel4.add(hSpacer5);
       }
       panel1.add(panel4);
-      panel1.add(vSpacer3);
 
       // ======== panel5 ========
       {
         panel5.setLayout(new BoxLayout(panel5, BoxLayout.X_AXIS));
-        panel5.add(hSpacer7);
 
         // ---- logout ----
         logout.setText("Logout");
@@ -207,15 +184,12 @@ public class Settings extends JDialog {
         logout.setPreferredSize(new Dimension(200, 25));
         logout.addActionListener(e -> logout(e));
         panel5.add(logout);
-        panel5.add(hSpacer8);
       }
       panel1.add(panel5);
-      panel1.add(vSpacer4);
 
       // ======== panel6 ========
       {
         panel6.setLayout(new BoxLayout(panel6, BoxLayout.X_AXIS));
-        panel6.add(hSpacer9);
 
         // ---- deleteAcc ----
         deleteAcc.setText("Delete Account");
@@ -224,10 +198,8 @@ public class Settings extends JDialog {
         deleteAcc.setPreferredSize(new Dimension(200, 25));
         deleteAcc.addActionListener(e -> deleteAcc(e));
         panel6.add(deleteAcc);
-        panel6.add(hSpacer10);
       }
       panel1.add(panel6);
-      panel1.add(vSpacer5);
     }
     contentPane.add(panel1, BorderLayout.CENTER);
     pack();
@@ -237,26 +209,12 @@ public class Settings extends JDialog {
   private JLabel label1;
   private JPanel panel1;
   private JPanel panel2;
-  private JPanel hSpacer1;
   private JButton rename;
-  private JPanel hSpacer2;
-  private JPanel vSpacer1;
   private JPanel panel3;
-  private JPanel hSpacer3;
   private JButton changePassword;
-  private JPanel hSpacer4;
-  private JPanel vSpacer2;
   private JPanel panel4;
-  private JPanel hSpacer5;
-  private JPanel vSpacer3;
   private JPanel panel5;
-  private JPanel hSpacer7;
   private JButton logout;
-  private JPanel hSpacer8;
-  private JPanel vSpacer4;
   private JPanel panel6;
-  private JPanel hSpacer9;
   private JButton deleteAcc;
-  private JPanel hSpacer10;
-  private JPanel vSpacer5;
 }
