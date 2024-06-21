@@ -2,6 +2,8 @@ package dev.lennis.school.notes.gui;
 
 import static javax.swing.JOptionPane.showInputDialog;
 
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import dev.lennis.school.notes.Gui;
 import dev.lennis.school.notes.Note;
 import dev.lennis.school.notes.User;
@@ -10,6 +12,7 @@ import java.awt.event.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -27,12 +30,10 @@ public class App extends JFrame {
   }
 
   public App() {
-    try {
-      UIManager.setLookAndFeel("com.formdev.flatlaf.themes.FlatMacDarkLaf");
-    } catch (Exception ex) {
-
-    }
+    FlatMacDarkLaf.setup();
+    FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", "#22b14c"));
     JFrame.setDefaultLookAndFeelDecorated(true);
+    JDialog.setDefaultLookAndFeelDecorated( true );
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     setName("Mint-Blow");
     setTitle("Mint-Blow");

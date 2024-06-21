@@ -18,7 +18,7 @@ repositories {
 dependencies {
   implementation 'org.commonmark:commonmark:0.22.0'
   implementation 'org.xerial:sqlite-jdbc:3.46.0.0'
-  implementation 'com.formdev:flatlaf-intellij-themes:3.4.1'
+  implementation 'com.formdev:flatlaf:3.4'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
