@@ -33,7 +33,6 @@ public class App extends JFrame {
     FlatMacDarkLaf.setup();
     FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", "#22b14c"));
     JFrame.setDefaultLookAndFeelDecorated(true);
-    JDialog.setDefaultLookAndFeelDecorated( true );
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     setName("Mint-Blow");
     setTitle("Mint-Blow");
