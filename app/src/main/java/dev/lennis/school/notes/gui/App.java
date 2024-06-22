@@ -153,7 +153,7 @@ public class App extends JFrame {
 
       for (Note note : sharedNotes) {
         JButton n = new JButton();
-        n.setText(String.format("Shared | {}", note.getHeading()));
+        n.setText(String.format("Shared | %s", note.getHeading()));
         Dimension prefSize = new Dimension(248, 50);
         n.setPreferredSize(prefSize);
         n.setMaximumSize(prefSize);
@@ -215,14 +215,6 @@ public class App extends JFrame {
     tagDefList.removeAllElements();
     ArrayList<String> tags = currentNote.getTags();
 
-    // Add also tags from shared notes
-    ArrayList<Note> sharedNotes = Note.getSharedNotes(currentUser.getUsername());
-    ArrayList<String> sharedNoteTags = new ArrayList<String>();
-    for (Note note : sharedNotes) {
-      sharedNoteTags.addAll(note.getTags());
-    }
-    tags.addAll(sharedNoteTags);
-
     for (String tag : tags) {
       ColoredItem l = new ColoredItem(tag, tagToColor(tag));
       tagDefList.addElement(l);
@@ -231,6 +223,16 @@ public class App extends JFrame {
     // Refresh Combobox
     tagBox.removeAllItems();
     ArrayList<String> allTags = currentUser.getTags();
+
+    // Add also tags from shared notes
+    ArrayList<Note> sharedNotes = Note.getSharedNotes(currentUser.getUsername());
+    ArrayList<String> sharedNoteTags = new ArrayList<String>();
+    for (Note note : sharedNotes) {
+      sharedNoteTags.addAll(note.getTags());
+    }
+    allTags.removeAll(sharedNoteTags);
+    allTags.addAll(sharedNoteTags);
+
     tagBox.addItem(new ColoredItem("ALL", Color.white));
     for (String tag : allTags) {
       tagBox.addItem(new ColoredItem(tag, tagToColor(tag)));
