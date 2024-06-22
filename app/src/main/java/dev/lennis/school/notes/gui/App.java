@@ -137,7 +137,6 @@ public class App extends JFrame {
       for (Note note : notes) {
         JButton n = new JButton();
         n.setText(note.getHeading());
-        Dimension prefSize = new Dimension(244, 50);
         n.setPreferredSize(prefSize);
         n.setMaximumSize(prefSize);
         n.setMinimumSize(prefSize);
@@ -154,7 +153,6 @@ public class App extends JFrame {
       for (Note note : sharedNotes) {
         JButton n = new JButton();
         n.setText(String.format("Shared | %s", note.getHeading()));
-        Dimension prefSize = new Dimension(248, 50);
         n.setPreferredSize(prefSize);
         n.setMaximumSize(prefSize);
         n.setMinimumSize(prefSize);
@@ -701,4 +699,5 @@ public class App extends JFrame {
   private DefaultListModel<ColoredItem> tagDefList;
   private JList<ColoredItem> tagView;
   private String tempNoteContent;
+  private Dimension prefSize = new Dimension(244, 50);
 }
