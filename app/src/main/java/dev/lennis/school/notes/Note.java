@@ -99,8 +99,26 @@ public class Note {
     return readAccess;
   }
 
+  public boolean canRead(String username) {
+    for (String user : getReadAccess()) {
+      if (user.equals(username)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public ArrayList<String> getWriteAccess() {
     return writeAccess;
+  }
+
+  public boolean canWrite(String username) {
+    for (String user : getWriteAccess()) {
+      if (user.equals(username)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public void addReadAccess(String username) {

@@ -1,5 +1,6 @@
 package dev.lennis.school.notes.gui;
 
+import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showInputDialog;
 
 import com.formdev.flatlaf.FlatLaf;
@@ -47,6 +48,7 @@ public class App extends JFrame {
 
   private Note currentNote;
   protected User currentUser;
+  private boolean canWrite;
 
   protected void login(String usr) {
     initComponents();
@@ -70,7 +72,10 @@ public class App extends JFrame {
   private void openNote(Note note) {
     currentNote = note;
     noteName.setText(note.getHeading());
-    noteEditor.setEditable(true);
+    canWrite =
+        currentNote.canWrite(currentUser.getUsername())
+            || (currentNote.getUsername()).equals(currentUser.getUsername());
+    noteEditor.setEditable(canWrite);
     noteEditor.setContentType("text/plain");
     noteEditor.setText(note.getText());
     refreshTagView();
@@ -119,12 +124,14 @@ public class App extends JFrame {
     for (int i = 0; i < len; i++) {
       noteList.getComponent(i).setVisible(false);
     }
-    noteList.removeAll();
 
     Object selectedItem = tagBox.getSelectedItem();
     if (selectedItem == null) {
       selectedItem = new ColoredItem("ALL", Color.white);
     }
+
+    ArrayList<Note> sharedNotes = Note.getSharedNotes(currentUser.getUsername());
+
     String currentTag = ((ColoredItem) selectedItem).getText();
     if (currentTag.equals("ALL")) {
       for (Note note : notes) {
@@ -143,6 +150,24 @@ public class App extends JFrame {
             });
         noteList.add(n);
       }
+
+      for (Note note : sharedNotes) {
+        JButton n = new JButton();
+        n.setText(String.format("Shared | {}", note.getHeading()));
+        Dimension prefSize = new Dimension(248, 50);
+        n.setPreferredSize(prefSize);
+        n.setMaximumSize(prefSize);
+        n.setMinimumSize(prefSize);
+        n.addActionListener(
+            new ActionListener() {
+              @Override
+              public void actionPerformed(ActionEvent e) {
+                openNote(note);
+              }
+            });
+        noteList.add(n);
+      }
+
     } else {
       for (Note note : notes) {
         ArrayList<String> noteTags = note.getTags();
@@ -163,12 +188,41 @@ public class App extends JFrame {
           noteList.add(n);
         }
       }
+
+      for (Note note : sharedNotes) {
+        ArrayList<String> noteTags = note.getTags();
+        if (noteTags.contains(currentTag)) {
+          JButton n = new JButton();
+          n.setText(String.format("Shared | %s", note.getHeading()));
+          Dimension prefSize = new Dimension(248, 50);
+          n.setPreferredSize(prefSize);
+          n.setMaximumSize(prefSize);
+          n.setMinimumSize(prefSize);
+          n.addActionListener(
+              new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                  openNote(note);
+                }
+              });
+          noteList.add(n);
+        }
+      }
     }
   }
 
   private void refreshTagView() {
     tagDefList.removeAllElements();
     ArrayList<String> tags = currentNote.getTags();
+
+    // Add also tags from shared notes
+    ArrayList<Note> sharedNotes = Note.getSharedNotes(currentUser.getUsername());
+    ArrayList<String> sharedNoteTags = new ArrayList<String>();
+    for (Note note : sharedNotes) {
+      sharedNoteTags.addAll(note.getTags());
+    }
+    tags.addAll(sharedNoteTags);
+
     for (String tag : tags) {
       ColoredItem l = new ColoredItem(tag, tagToColor(tag));
       tagDefList.addElement(l);
@@ -221,7 +275,94 @@ public class App extends JFrame {
   }
 
   private void shareBtn(ActionEvent e) {
-    // TODO add your code here
+    String username = showInputDialog("With whom do you want to share this Note?");
+    if (username == null) {
+      return;
+    }
+    if (username.isBlank()) {
+      return;
+    }
+    if (username.equals(currentUser.getUsername())) {
+      Gui.errorAlert("You can't share the note with yourself");
+      return;
+    }
+    int canWriteDig =
+        showConfirmDialog(
+            getParent(), String.format("Should \"%s\" be allowed to write to the note?", username));
+    boolean canWrite;
+    if (canWriteDig == 0) {
+      canWrite = true;
+    } else if (canWriteDig == 1) {
+      canWrite = false;
+    } else {
+      canWrite = currentNote.canWrite(username);
+    }
+    ArrayList<String> sharedOnes = currentNote.getReadAccess();
+    sharedOnes.removeAll(currentNote.getWriteAccess());
+    sharedOnes.addAll(currentNote.getWriteAccess());
+
+    if (!User.userExists(username)) {
+      Gui.errorAlert(String.format("User \"%s\" does not exist", username));
+      return;
+    }
+
+    for (String usr : sharedOnes) {
+      if (usr.equals(username)) {
+        if (canWrite == currentNote.canWrite(username)) {
+          Gui.errorAlert("You're already sharing the note with this user");
+          return;
+        }
+        int conf;
+        if (canWrite) {
+          conf =
+              showConfirmDialog(
+                  getParent(),
+                  String.format(
+                      "Update permission of \"%s\" to \ndisallow writing to the note?", username));
+        } else {
+          conf =
+              showConfirmDialog(
+                  getParent(),
+                  String.format(
+                      "Update permission of \"%s\" to \nsallow writing to the note?", username));
+        }
+        if (conf != 2) {
+          currentNote.setPermission(conf == 0);
+        }
+        return;
+      }
+    }
+
+    currentNote.addShare(username, canWrite);
+  }
+
+  private void removeShareBtn(ActionEvent e) {
+    String username = showInputDialog("Stop sharing with whom?");
+    if (username == null) {
+      return;
+    }
+    if (username.isBlank()) {
+      return;
+    }
+
+    ArrayList<String> sharedOnes = currentNote.getReadAccess();
+    sharedOnes.removeAll(currentNote.getWriteAccess());
+    sharedOnes.addAll(currentNote.getWriteAccess());
+
+    boolean usrSharedWith = false;
+    for (String usr : sharedOnes) {
+      if (usr.equals(username)) {
+        usrSharedWith = true;
+        break;
+      }
+      usrSharedWith = false;
+    }
+    if (!usrSharedWith) {
+      Gui.errorAlert(String.format("You are not sharing the note with \"%s\"", username));
+      return;
+    }
+
+    currentNote.removeShare(username, currentNote.canRead(username));
   }
 
   private void changeModeBtn(ActionEvent e) {
@@ -235,7 +376,7 @@ public class App extends JFrame {
       HtmlRenderer renderer = HtmlRenderer.builder().build();
       noteEditor.setText(renderer.render(document));
     } else {
-      noteEditor.setEditable(true);
+      noteEditor.setEditable(canWrite);
       changeMode.setText("Read mode");
       noteEditor.setContentType("text/plain");
       noteEditor.setText(tempNoteContent);
@@ -358,6 +499,7 @@ public class App extends JFrame {
     newNote = new JButton();
     deleteNote = new JButton();
     shareNote = new JButton();
+    removeShare = new JButton();
     save = new JButton();
     rename = new JButton();
     addTag = new JButton();
@@ -412,6 +554,11 @@ public class App extends JFrame {
       shareNote.setText("share");
       shareNote.addActionListener(e -> shareBtn(e));
       panel1.add(shareNote);
+
+      // ---- shareNote ----
+      removeShare.setText("unshare");
+      removeShare.addActionListener(e -> removeShareBtn(e));
+      panel1.add(removeShare);
 
       // ---- save ----
       save.setText("save");
@@ -524,6 +671,7 @@ public class App extends JFrame {
   private JButton newNote;
   private JButton deleteNote;
   private JButton shareNote;
+  private JButton removeShare;
   private JButton save;
   private JButton rename;
   private JButton addTag;
