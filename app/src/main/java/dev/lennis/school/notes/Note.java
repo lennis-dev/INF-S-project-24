@@ -21,6 +21,7 @@ public class Note {
       } else {
         noteTmp.setPermission(false);
       }
+      notes.add(noteTmp);
     }
     return notes;
   }
