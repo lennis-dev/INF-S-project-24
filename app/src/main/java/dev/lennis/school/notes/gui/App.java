@@ -277,7 +277,7 @@ public class App extends JFrame {
   }
 
   private void shareBtn(ActionEvent e) {
-    if (currentNote.getUsername() != currentUser.getUsername()) {
+    if (!currentNote.getUsername().equals(currentUser.getUsername())) {
       Gui.errorAlert("You can't share a note that you don't own");
       return;
     }
@@ -343,7 +343,7 @@ public class App extends JFrame {
   }
 
   private void removeShareBtn(ActionEvent e) {
-    if (currentNote.getUsername() != currentUser.getUsername()) {
+    if (!currentNote.getUsername().equals(currentUser.getUsername())) {
       Gui.errorAlert("You can't unshare someone on a note you don't own");
       return;
     }
