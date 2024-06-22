@@ -324,7 +324,7 @@ public class App extends JFrame {
               showConfirmDialog(
                   getParent(),
                   String.format(
-                      "Update permission of \"%s\" to \nsallow writing to the note?", username));
+                      "Update permission of \"%s\" to \nallow writing to the note?", username));
         }
         if (conf != 2) {
           currentNote.setPermission(conf == 0);
