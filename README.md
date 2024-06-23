@@ -37,6 +37,7 @@ Now you can create an account and start taking notes!
   - SQL Injection prevention
   - Secure password change
   - Secure account deletion
+  - Open Source (GLPv3)
 - Database
   - SQLite
   - No external database required
