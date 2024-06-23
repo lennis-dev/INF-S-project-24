@@ -8,7 +8,9 @@ A simple note taking app with multi user support that allows you to take notes a
 ## Quick Start
 Download the latest release from the [releases page](https://github.com/lennis-dev/INF-S-project-24/releases) and run the jar file with `java -jar mint-blow.jar`.
 
-Now you can create an account and start taking notes!
+Now you can create an account and start taking notes, don't forget to star the project if you like it!
+
+And if you want to compile the project yourself, follow the instructions in the [compiling section](#compiling).
 
 ## Features
 - Users
