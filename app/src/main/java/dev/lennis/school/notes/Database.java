@@ -77,7 +77,7 @@ public class Database {
 
   public static void install() {
     String[] sql = {
-      "CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY, username TINYTEXT, heading text,"
+      "CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY, username TINYTEXT, heading TEXT,"
           + " text TEXT, FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE)",
       "CREATE TABLE IF NOT EXISTS tags (noteID INTEGER, tag TINYTEXT, FOREIGN KEY(noteID)"
           + " REFERENCES notes(id) ON DELETE CASCADE)",
