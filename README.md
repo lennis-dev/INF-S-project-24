@@ -87,12 +87,13 @@ Now you can create an account and start taking notes!
 ### Relational Schema
 PRIMARY KEY: **bold**, FOREIGN KEY: *italicized*
 
-|Relations|
----
-|notes (**id INT**, *username TINYTEXT*, heading TEXT, text TEXT)|
-|users (**username TINYTEXT**, displayName TINYTEXT, passwordSalt TINYTEXT, passwordHash TEXT)|
-|tags (*noteID INT*, tag TINYTEXT)|
-|permissions (*noteID INTEGER*, *username TINYTEXT*, permissionMode BIT)|
+notes (**id INT**, *username TINYTEXT*, heading TEXT, text TEXT)|
+
+users (**username TINYTEXT**, displayName TINYTEXT, passwordSalt TINYTEXT, passwordHash TEXT)|
+
+tags (*noteID INT*, tag TINYTEXT)|
+
+permissions (*noteID INTEGER*, *username TINYTEXT*, permissionMode BIT)|
 
 ## Credits
 - [SQLite JDBC](https://github.com/xerial/sqlite-jdbc/)
