@@ -53,6 +53,9 @@ Download the latest release from the [releases page]() and run the jar file with
 ### App
 ![App](./screenshots/app.png)
 
+### Read Mode
+![Read Mode](./screenshots/read-mode.png)
+
 ## Compiling
 
 > [!IMPORTANT]
@@ -68,9 +71,12 @@ Download the latest release from the [releases page]() and run the jar file with
 ### Windows
 1. Jump into the project directory
 2. run `gradlew.bat build` in the command prompt
-3. The jar file will be located in `./app/build/libs/`
+3. The jar file will be located in `.\app\build\libs\`
 4. Run the jar file with `java -jar mint-blow.jar`
 5. Enjoy!
 
-
+## Credits
+- [SQLite JDBC](https://github.com/xerial/sqlite-jdbc/)
+- [FlatLaf](https://www.formdev.com/flatlaf/)
+- [Commonmark](https://commonmark.org/)
 
